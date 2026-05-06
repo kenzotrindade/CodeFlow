@@ -1,0 +1,77 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String         @id @default(uuid())
+  username      String         @unique
+  email         String         @unique
+  password      String
+  languages     UserLanguage[]
+  userExercises UserExercise[]
+}
+
+model Language {
+  id        String         @id @default(uuid())
+  name      String         @unique
+  exercises Exercise[]
+  users     UserLanguage[]
+}
+
+model UserLanguage {
+  userId     String
+  languageId String
+  user       User     @relation(fields: [userId], references: [id])
+  language   Language @relation(fields: [languageId], references: [id])
+
+  @@id([userId, languageId])
+}
+
+model Exercise {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  difficulty  Int
+  languageId  String
+  language    Language  @relation(fields: [languageId], references: [id])
+  source      String    // "manual", "ai", "techwatch"
+  createdAt   DateTime  @default(now())
+  
+  userExercises      UserExercise[]
+  techWatchExercises TechWatchExercise[]
+}
+
+model UserExercise {
+  id         String   @id @default(uuid())
+  userId     String
+  exerciseId String
+  completed  Boolean  @default(false)
+  score      Int      @default(0)
+  user       User     @relation(fields: [userId], references: [id])
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+}
+
+model TechWatch {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  sourceUrl String
+  createdAt DateTime @default(now())
+  exercises TechWatchExercise[]
+}
+
+model TechWatchExercise {
+  id          String    @id @default(uuid())
+  techWatchId String
+  exerciseId  String
+  techWatch   TechWatch @relation(fields: [techWatchId], references: [id])
+  exercise    Exercise  @relation(fields: [exerciseId], references: [id])
+}
