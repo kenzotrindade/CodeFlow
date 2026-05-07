@@ -1,4 +1,10 @@
 import "./globals.css";
+import { Providers } from "@/components/Providers";
+import Navbar from "@/components/Navbar";
+
+// #################################
+// ### Global Layout
+// #################################
 
 export default function RootLayout({
   children,
@@ -6,10 +12,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <html lang="fr">
-        <body>
+    <html lang="fr">
+      <body>
+        <Providers>
+          <Navbar></Navbar>
           {children}
-        </body>
-      </html>
+        </Providers>
+      </body>
+    </html>
   );
 }
