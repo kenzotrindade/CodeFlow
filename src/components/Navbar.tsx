@@ -1,20 +1,22 @@
+import Link from "next/link";
+
 export default function Navbar() {
   return (
     <div>
       <nav className="flex justify-between p-6 text-2xl bg-gray-800">
-        <a href="/" className="text-white">
+        <Link href={"/"} className="text-white">
           Devolinguo.
-        </a>
+        </Link>
         <ul className="flex gap-6 text-blue-500 underline">
           <li>
-            <a href="/login" className="hover:text-blue-400">
+            <Link href="/login" className="hover:text-blue-400">
               Login
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="/register" className="hover:text-blue-400">
+            <Link href="/register" className="hover:text-blue-400">
               Register
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>
