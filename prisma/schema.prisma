@@ -46,6 +46,7 @@ model User {
 
   preferences UserLanguagePreference[]
   attempts    ExerciseAttempt[]
+  exercises   Exercise[]               @relation("UserExercises")
 }
 
 model Language {
@@ -70,6 +71,7 @@ model UserLanguagePreference {
 
   frequencyType  FrequencyType
   frequencyCount Int
+  selectedDays   Int[]
 
   active Boolean @default(true)
 
@@ -84,17 +86,20 @@ model UserLanguagePreference {
 model Exercise {
   id String @id @default(cuid())
 
-  title       String
-  statement   String
-  solution    String
+  title          String
+  statement      String   @db.Text
+  codeSnippet    String?  @db.Text
+  expectedOutput String   @db.Text
 
   difficulty Difficulty
 
   languageId String
+  creatorId  String?
 
   createdAt DateTime @default(now())
 
   language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  user     User?    @relation("UserExercises", fields: [creatorId], references: [id], onDelete: SetNull)
 
   attempts ExerciseAttempt[]
 

@@ -3,12 +3,13 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "./prisma";
 import bcrypt from "bcryptjs";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { NextAuthOptions } from "next-auth";
 
 // #################################
 // ### NextAuth Authentification
 // #################################
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GitHubProvider({
@@ -34,7 +35,7 @@ export const authOptions = {
           where: { email: credentials.email },
         });
 
-        if (!user || !user.password) {
+        if (!user?.password) {
           return null;
         }
 
