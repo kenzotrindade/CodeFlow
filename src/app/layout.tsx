@@ -1,6 +1,4 @@
 import "./globals.css";
-import { Providers } from "@/components/Providers";
-import Navbar from "@/components/Navbar";
 
 // #################################
 // ### Global Layout
@@ -13,12 +11,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body>
-        <Providers>
-          <Navbar></Navbar>
-          {children}
-        </Providers>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
