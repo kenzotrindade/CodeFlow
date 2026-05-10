@@ -1,5 +1,6 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 
 // #################################
 // ### Global Layout
@@ -13,9 +14,11 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body>
-        <Navbar></Navbar>
-        {children}
-        </body>
+        <SessionProviderWrapper>
+          <Navbar />
+          {children}
+        </SessionProviderWrapper>
+      </body>
     </html>
   );
 }
