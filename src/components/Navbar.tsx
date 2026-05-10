@@ -1,5 +1,9 @@
 import Link from "next/link";
 
+// #################################
+// ### Navbar Component
+// #################################
+
 export default function Navbar() {
   return (
     <div>
