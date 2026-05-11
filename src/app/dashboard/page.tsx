@@ -1,27 +1,25 @@
-"use client";
-
-import { signOut, useSession } from "next-auth/react";
+import prisma from "@/lib/prisma";
+import { Difficulty } from "@prisma/client";
+import DashboardForms from "@/components/DashboardForms";
+import { auth } from "@/lib/auth";
 
 // #################################
 // ### Dashboard Page
 // #################################
 
-export default function Dashboard() {
-  const { data: session } = useSession();
+export default async function Dashboard() {
+  const session = await auth();
+  const languages = await prisma.language.findMany();
+  const difficulties = Object.values(Difficulty);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <h1 className="text-2xl font-bold">Dashboard</h1>
       {session && (
-        <div className="mt-4 flex flex-col items-center gap-4">
-          <p>Welcome, {session.user?.name || session.user?.email}</p>
-          <button
-            onClick={() => signOut({ callbackUrl: "/" })}
-            className="bg-red-600 text-white px-4 py-2 rounded"
-          >
-            Sign out
-          </button>
-        </div>
+        <>
+          <p className="mb-4">Welcome, {session.user?.name}</p>
+          <DashboardForms languages={languages} difficulties={difficulties} />
+        </>
       )}
     </div>
   );
