@@ -56,7 +56,7 @@ export default function Register() {
     <div className="flex flex-col items-center justify-center min-h-screen">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-80">
         <h1 className="text-2xl font-bold">Inscription</h1>
-        
+
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded text-sm">
             {error}
@@ -90,9 +90,9 @@ export default function Register() {
           required
           disabled={loading}
         />
-        <button 
-          type="submit" 
-          className={`p-2 rounded text-white font-semibold ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-black hover:bg-gray-800'}`}
+        <button
+          type="submit"
+          className={`p-2 rounded text-white font-semibold ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-800"}`}
           disabled={loading}
         >
           {loading ? "Création du compte..." : "S'inscrire"}
