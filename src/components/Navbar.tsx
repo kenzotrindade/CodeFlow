@@ -9,7 +9,7 @@ export default function Navbar() {
     <div>
       <nav className="flex justify-between p-6 text-2xl bg-gray-800">
         <Link href={"/"} className="text-white">
-          Devolinguo.
+          CodeFlow.
         </Link>
         <ul className="flex gap-6 text-blue-500 underline">
           <li>

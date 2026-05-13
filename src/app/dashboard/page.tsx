@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { Difficulty } from "@prisma/client";
+import { Difficulty } from "@prisma/client/edge";
 import DashboardForms from "@/components/DashboardForms";
 import { auth } from "@/lib/auth";
 
@@ -8,7 +8,7 @@ import { auth } from "@/lib/auth";
 // #################################
 
 export default async function Dashboard() {
-  const session = await auth();
+  const session = await auth(); // Find session's token
   const languages = await prisma.language.findMany();
   const difficulties = Object.values(Difficulty);
 

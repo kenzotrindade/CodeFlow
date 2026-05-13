@@ -18,7 +18,7 @@ function LoginContent() {
   const searchParams = useSearchParams();
   const isRegistered = searchParams.get("registered");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -30,7 +30,7 @@ function LoginContent() {
     });
 
     if (res?.error) {
-      setError("Email ou mot de passe invalide");
+      setError("Invalid email or password");
       setLoading(false);
     } else {
       router.push("/dashboard");
@@ -40,11 +40,11 @@ function LoginContent() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-80">
-        <h1 className="text-2xl font-bold">Connexion</h1>
+        <h1 className="text-2xl font-bold">Login</h1>
 
         {isRegistered && !error && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded text-sm">
-            Compte créé ! Veuillez vous connecter.
+            Account created, please login !
           </div>
         )}
 
@@ -77,7 +77,7 @@ function LoginContent() {
           className={`p-2 rounded text-white font-semibold ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
           disabled={loading}
         >
-          {loading ? "Connexion en cours..." : "Se connecter"}
+          {loading ? "Login in progress..." : "Login"}
         </button>
       </form>
       <div className="mt-4 text-center">
@@ -86,15 +86,15 @@ function LoginContent() {
           className="text-blue-600 hover:underline text-sm disabled:opacity-50"
           disabled={loading}
         >
-          Se connecter avec GitHub
+          Login with Github
         </button>
         <p className="mt-4 text-sm text-gray-600">
-          Pas encore de compte ?{" "}
+          Don&apos;t have any account ?{" "}
           <a
             href="/register"
             className="text-blue-600 hover:underline font-medium"
           >
-            S'inscrire
+            Register
           </a>
         </p>
       </div>
@@ -104,7 +104,7 @@ function LoginContent() {
 
 export default function Login() {
   return (
-    <Suspense fallback={<div>Chargement...</div>}>
+    <Suspense fallback={<div>Loading...</div>}>
       <LoginContent />
     </Suspense>
   );

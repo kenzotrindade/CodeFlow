@@ -16,7 +16,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -31,7 +31,7 @@ export default function Register() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "Erreur lors de l'inscription");
+        throw new Error(data.error || "Register error");
       }
 
       const loginRes = await signIn("credentials", {
@@ -45,8 +45,12 @@ export default function Register() {
       } else {
         router.push("/dashboard");
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Unkown error during register");
+      }
     } finally {
       setLoading(false);
     }
@@ -95,7 +99,7 @@ export default function Register() {
           className={`p-2 rounded text-white font-semibold ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-800"}`}
           disabled={loading}
         >
-          {loading ? "Création du compte..." : "S'inscrire"}
+          {loading ? "Registering..." : "Register"}
         </button>
       </form>
       <div className="mt-4">
@@ -104,7 +108,7 @@ export default function Register() {
           className="text-blue-600 hover:underline text-sm disabled:opacity-50"
           disabled={loading}
         >
-          S'inscrire avec GitHub
+          Register with Github
         </button>
       </div>
     </div>

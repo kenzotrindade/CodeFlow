@@ -1,5 +1,6 @@
 "use client";
-import { Language, Difficulty } from "@prisma/client";
+
+import { Language, Difficulty } from "@prisma/client/edge";
 import { GeneratePrompt } from "@/app/actions/generate";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -20,7 +21,7 @@ export default function DashboardForms({
     startTransition(async () => {
       const lang = languages.find((l) => l.id === selectedLangId);
       if (!lang) {
-        return null;
+        return;
       }
 
       const exercise = await GeneratePrompt({
@@ -60,7 +61,7 @@ export default function DashboardForms({
         disabled={isPending}
         className="bg-blue-600 text-white px-4 py-2 rounded"
       >
-        {isPending ? "Génération..." : "Générer"}
+        {isPending ? "Generation..." : "Generate"}
       </button>
     </div>
   );

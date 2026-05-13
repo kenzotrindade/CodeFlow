@@ -2,10 +2,11 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import prisma from "@/lib/prisma";
-import { Difficulty, Language } from "@prisma/client";
+import { Language, Difficulty } from "@prisma/client/edge";
 import prompts from "@/lib/prompts/prompts.json";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+console.log(process.env.GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
 export async function GeneratePrompt({
   language,
