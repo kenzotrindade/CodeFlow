@@ -1,6 +1,6 @@
 "use client";
 
-import { Language, Difficulty } from "@prisma/client/edge";
+import { Language, Difficulty } from "@prisma/client";
 import { GeneratePrompt } from "@/app/actions/generate";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";

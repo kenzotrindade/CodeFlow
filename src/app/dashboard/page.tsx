@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { Difficulty } from "@prisma/client/edge";
+import { Difficulty } from "@prisma/client";
 import DashboardForms from "@/components/DashboardForms";
 import { auth } from "@/lib/auth";
 

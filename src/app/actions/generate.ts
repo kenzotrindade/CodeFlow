@@ -2,7 +2,7 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import prisma from "@/lib/prisma";
-import { Language, Difficulty } from "@prisma/client/edge";
+import { Language, Difficulty } from "@prisma/client";
 import prompts from "@/lib/prompts/prompts.json";
 
 console.log(process.env.GEMINI_API_KEY);
