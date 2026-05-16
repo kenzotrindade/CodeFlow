@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { completeExercise } from "@/app/actions/exercise";
 
 export default async function ExercisePage({
   params,
@@ -17,6 +18,8 @@ export default async function ExercisePage({
     notFound();
   }
 
+  const completeExercice = completeExercise.bind(null, id)
+
   return (
     <div className="p-4 flex flex-col">
       <Link href="/dashboard">Dashboard</Link>
@@ -26,6 +29,10 @@ export default async function ExercisePage({
       </p>
 
       <p>{exercise.statement}</p>
+
+      <form action={completeExercice}>
+        <button type="submit">I have finished</button>
+      </form>
     </div>
   );
 }
