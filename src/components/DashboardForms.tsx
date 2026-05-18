@@ -1,6 +1,6 @@
 "use client";
 
-import { Language, Difficulty } from "@prisma/client";
+import { Language, Difficulty, Exercise } from "@prisma/client";
 import { GeneratePrompt } from "@/app/actions/generate";
 import { promptForm } from "@/lib/types";
 import { useRouter } from "next/navigation";
@@ -17,6 +17,8 @@ export default function DashboardForms({
   const [isPending, startTransition] = useTransition();
   const [selectedLangId, setSelectedLangId] = useState(languages[0]?.id);
   const [selectedDiff, setSelectedDiff] = useState(difficulties[0]);
+  const [showProjectModal, setShowProjetModal] = useState(false);
+  const [lastGeneratedId, setLastGeneratedId] = useState<string | null>(null);
 
   const handleGenerate = () => {
     startTransition(async () => {
@@ -30,7 +32,13 @@ export default function DashboardForms({
         difficulty: selectedDiff as Difficulty,
         promptArgs: promptForm.progressive,
       });
-      router.push(`/exercise/${exercise.id}`);
+
+      if (exercise.isCapstone) {
+        setLastGeneratedId(exercise.id);
+        setShowProjetModal(true);
+      } else {
+        router.push(`/exercise/${exercise.id}`);
+      }
     });
   };
   return (
@@ -65,6 +73,16 @@ export default function DashboardForms({
       >
         {isPending ? "Generation..." : "Generate"}
       </button>
+
+      {showProjectModal && (
+        <div>
+          <h2>Congrats !</h2>
+          <p>You have complete the ${selectedDiff} module !</p>
+          <button
+            onClick={() => router.push(`/exercise/${lastGeneratedId}`)}
+          ></button>
+        </div>
+      )}
     </div>
   );
 }

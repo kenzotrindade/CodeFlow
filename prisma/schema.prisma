@@ -87,10 +87,12 @@ model Exercise {
 
   title          String
   statement      String   @db.Text
+  notion         String?
   codeSnippet    String?  @db.Text
   expectedOutput String   @db.Text
 
   difficulty Difficulty
+  isCapstone Boolean  @default(false)
 
   languageId String
   creatorId  String?

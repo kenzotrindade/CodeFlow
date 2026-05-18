@@ -12,7 +12,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 export async function GeneratePrompt({
   language,
   difficulty,
-  promptArgs = promptForm.standard,
+  promptArgs = promptForm.progressive,
 }: {
   language: Language;
   difficulty: Difficulty;
@@ -23,7 +23,7 @@ export async function GeneratePrompt({
   let template;
   let finalPrompt;
 
-  if (promptArgs == promptForm.progressive) {
+  if (promptArgs === promptForm.progressive) {
     const exercises = await prisma.exercise.findMany({
       where: { creatorId: session?.user?.id, languageId: language.id },
       include: {
@@ -37,18 +37,21 @@ export async function GeneratePrompt({
 
     const history = exercises
       .map((e) => {
-        const status = e.attempts[0]?.status;
-        return `- ${e.title} - ${e.attempts} (${e.difficulty}, Statut: ${status})`;
+        const status = e.attempts[0]?.status || "Non tenté";
+        return `- ${e.title} (${e.difficulty}, Statut: ${status})`;
       })
       .join("\n");
+
+    const historyText =
+      history.length > 0 ? history : "No History, first exercise";
 
     template = prompts.exercise_generation.progressive.prompt;
     finalPrompt = template
       .replaceAll("{{language}}", language.name)
       .replaceAll("{{difficulty}}", difficulty)
-      .replaceAll("{{last_exercises}}", history);
+      .replaceAll("{{last_exercises}}", historyText);
   } else {
-    template = prompts.exercise_generation.standard.prompt;
+    template = prompts.exercise_generation.progressive.prompt;
     finalPrompt = template
       .replaceAll("{{language}}", language.name)
       .replaceAll("{{difficulty}}", difficulty);
@@ -72,6 +75,8 @@ export async function GeneratePrompt({
         title: data.title,
         statement: data.statement,
         expectedOutput: data.expectedOutput,
+        notion: data.notion || null,
+        isCapstone: data.isCapstone || false,
         difficulty: difficulty,
         languageId: language.id,
         creatorId: session?.user?.id || null,
