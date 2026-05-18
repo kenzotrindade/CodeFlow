@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { auth } from "@/lib/auth";
+import { auth, signOut } from "@/lib/auth";
 
 // #################################
 // ### Navbar Component
@@ -14,7 +14,7 @@ export default async function Navbar() {
           CodeFlow.
         </Link>
         <div>
-          {session ? (
+          {session?.user ? (
             <ul className="flex gap-6 text-blue-500 underline">
               <li>
                 <Link href="/dashboard" className="hover:text-blue-400">
@@ -25,6 +25,16 @@ export default async function Navbar() {
                 <Link href="/account" className="hover:text-blue-400">
                   Account
                 </Link>
+              </li>
+              <li>
+                <form
+                  action={async () => {
+                    "use server";
+                    await signOut({ redirectTo: "/" });
+                  }}
+                >
+                  <button type="submit">Sign Out</button>
+                </form>
               </li>
             </ul>
           ) : (

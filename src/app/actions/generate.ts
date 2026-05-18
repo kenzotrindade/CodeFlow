@@ -5,7 +5,6 @@ import prisma from "@/lib/prisma";
 import { Language, Difficulty } from "@prisma/client";
 import prompts from "@/lib/prompts/prompts.json";
 
-console.log(process.env.GEMINI_API_KEY);
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
 export async function GeneratePrompt({
@@ -27,19 +26,24 @@ export async function GeneratePrompt({
     },
   });
 
-  const result = await model.generateContent(finalPrompt);
-  const response = result.response.text();
-  const data = JSON.parse(response);
+  try {
+    const result = await model.generateContent(finalPrompt);
+    const response = result.response.text();
+    const data = JSON.parse(response);
 
-  const newExercise = await prisma.exercise.create({
-    data: {
-      title: data.title,
-      statement: data.statement,
-      expectedOutput: data.expectedOutput,
-      difficulty: difficulty,
-      languageId: language.id,
-    },
-  });
+    const newExercise = await prisma.exercise.create({
+      data: {
+        title: data.title,
+        statement: data.statement,
+        expectedOutput: data.expectedOutput,
+        difficulty: difficulty,
+        languageId: language.id,
+      },
+    });
 
-  return newExercise;
+    return newExercise;
+  } catch (error: any) {
+    console.error("Error generating exercise:", error);
+    throw new Error(error.message || "Failed to generate exercise");
+  }
 }
