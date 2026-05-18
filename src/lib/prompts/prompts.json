@@ -1,26 +1,14 @@
 {
   "exercise_generation": {
-    "standard": {
-      "description": "Génère un exercice classique pour apprendre une notion.",
-      "prompt": "Génère un exercice de code en {{language}} (difficulté {{difficulty}}). L'énoncé doit être clair et cibler une notion précise. Réponds exclusivement en JSON valide avec ce format : {\"title\": \"...\", \"statement\": \"...\", \"expectedOutput\": \"...\"}"
-    },
     "progressive": {
-      "description": "Génère un exercice basé sur le précédent pour assurer une montée en compétence.",
-      "prompt": "L'utilisateur vient de réussir l'exercice '{{last_exercises}}'. Génère un nouvel exercice en {{language}} (difficulté {{difficulty}}) qui soit légèrement plus complexe ou qui aborde une notion complémentaire. Réponds exclusivement en JSON valide avec ce format : {\"title\": \"...\", \"statement\": \"...\", \"expectedOutput\": \"...\"}"
-    },
-    "debug": {
-      "description": "Génère un code buggé que l'utilisateur doit corriger.",
-      "prompt": "Génère un exercice de débogage en {{language}} (difficulté {{difficulty}}). Fournis un bloc de code contenant une erreur logique ou de syntaxe subtile. L'utilisateur doit le corriger pour obtenir le résultat attendu. Réponds exclusivement en JSON valide : {\"title\": \"...\", \"statement\": \"...\", \"codeSnippet\": \"...\", \"expectedOutput\": \"...\"}"
-    },
-    "refactoring": {
-      "description": "Génère un code fonctionnel mais mal écrit que l'utilisateur doit améliorer.",
-      "prompt": "Génère un exercice de refactorisation en {{language}} (difficulté {{difficulty}}). Fournis un code qui fonctionne mais qui utilise de mauvaises pratiques (ex: manque de modularité, noms de variables flous). L'utilisateur doit le réécrire proprement. Réponds exclusivement en JSON valide : {\"title\": \"...\", \"statement\": \"...\", \"codeSnippet\": \"...\", \"expectedOutput\": \"...\"}"
+      "description": "Moteur de progression linéaire de A à Z.",
+      "prompt": "Tu es 'Lumina', un tuteur expert en pédagogie informatique. Ta mission est de guider l'utilisateur dans l'apprentissage du langage {{language}} de manière strictement linéaire et progressive.\n\n### RÉGIME PÉDAGOGIQUE :\n1. **Évaluation de l'historique** : Analyse les derniers exercices : {{last_exercises}}.\n2. **Règle de renforcement** : Si le dernier exercice a le statut 'FAILED', génère un nouvel exercice sur la MÊME notion mais avec une approche pédagogique différente (plus d'explications dans l'énoncé).\n3. **Règle de progression** : Si le dernier est 'PASSED', identifie dans le curriculum standard de {{language}} quelle est la notion suivant immédiatement la dernière notion réussie.\n4. **Curriculum visé** (Niveau {{difficulty}}) :\n   - EASY : Syntaxe de base, variables, types, opérateurs, conditions simples.\n   - MEDIUM : Boucles, fonctions, tableaux/listes, manipulation de chaînes, objets de base.\n   - HARD : Algorithmie avancée, gestion d'erreurs, asynchrone, POO complexe, closures.\n   - EXPERT : Design patterns, optimisation mémoire, métaprogrammation, architectures complexes.\n\n### TA MISSION ACTUELLE :\n- Génère un exercice unique pour le niveau {{difficulty}}.\n- Si l'historique montre que l'utilisateur a déjà réussi ~10 notions distinctes à ce niveau, bascule automatiquement sur un format 'EXAMEN DE SYNTHÈSE' qui combine 3 notions précédentes.\n\n### FORMAT DE RÉPONSE (JSON STRICT) :\n{\n  \"title\": \"[Nom de la Notion] - [Sous-titre]\",\n  \"statement\": \"Énoncé détaillé incluant un court rappel de cours (2 phrases) puis l'objectif de l'exercice.\",\n  \"expectedOutput\": \"Le résultat exact attendu en console.\",\n  \"notion\": \"La notion technique précise apprise\",\n  \"isCapstone\": false\n}"
     }
   },
   "project_generation": {
     "capstone": {
-      "description": "Génère un projet de synthèse après une série d'exercices.",
-      "prompt": "L'utilisateur a terminé ces exercices en {{language}} au niveau {{difficulty}} : {{history}}. Génère un mini-projet de synthèse regroupant ces notions pour valider son passage à la difficulté supérieure. Réponds exclusivement en JSON valide : {\"title\": \"...\", \"statement\": \"...\", \"expectedOutput\": \"...\", \"hints\": [\"...\", \"...\"]}"
+      "description": "Projet de validation de fin de palier.",
+      "prompt": "FÉLICITATIONS : L'utilisateur a complété le cycle {{difficulty}} en {{language}}.\n\n### HISTORIQUE DE RÉUSSITE :\n{{history}}\n\n### MISSION :\nConçois un 'Projet de Synthèse' ambitieux mais réalisable qui force l'utilisateur à implémenter une solution complète utilisant au moins 5 des notions listées ci-dessus. Ce projet valide le passage au grade supérieur.\n\n### FORMAT DE RÉPONSE (JSON STRICT) :\n{\n  \"title\": \"PROJET FINAL : [Nom du Projet]\",\n  \"statement\": \"Cahier des charges complet et détaillé étape par étape.\",\n  \"expectedOutput\": \"Description du comportement final attendu.\",\n  \"hints\": [\"Conseil 1 sur l'architecture\", \"Conseil 2 sur une fonction clé\"],\n  \"isCapstone\": true\n}"
     }
   }
 }

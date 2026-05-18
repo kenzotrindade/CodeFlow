@@ -1,7 +1,8 @@
 "use client";
 
 import { Language, Difficulty } from "@prisma/client";
-import { GeneratePrompt, promptForm } from "@/app/actions/generate";
+import { GeneratePrompt } from "@/app/actions/generate";
+import { promptForm } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 

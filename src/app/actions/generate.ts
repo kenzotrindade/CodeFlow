@@ -5,16 +5,9 @@ import prisma from "@/lib/prisma";
 import { Language, Difficulty } from "@prisma/client";
 import prompts from "@/lib/prompts/prompts.json";
 import { auth } from "@/lib/auth";
+import { promptForm } from "@/lib/types";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
-
-export enum promptForm {
-  standard = "standard",
-  progressive = "progressive",
-  debug = "debug",
-  refactoring = "refactoring",
-  project_generation = "project_generation",
-}
 
 export async function GeneratePrompt({
   language,
@@ -33,16 +26,27 @@ export async function GeneratePrompt({
   if (promptArgs == promptForm.progressive) {
     const exercises = await prisma.exercise.findMany({
       where: { creatorId: session?.user?.id, languageId: language.id },
+      include: {
+        attempts: {
+          where: { userId: session?.user?.id },
+          orderBy: { createdAt: "desc" },
+        },
+      },
       orderBy: { createdAt: "desc" },
     });
 
-    const titles = exercises.map((e) => e.title).join(", ");
+    const history = exercises
+      .map((e) => {
+        const status = e.attempts[0]?.status;
+        return `- ${e.title} - ${e.attempts} (${e.difficulty}, Statut: ${status})`;
+      })
+      .join("\n");
 
     template = prompts.exercise_generation.progressive.prompt;
     finalPrompt = template
       .replaceAll("{{language}}", language.name)
       .replaceAll("{{difficulty}}", difficulty)
-      .replaceAll("{{last_exercises}}", titles);
+      .replaceAll("{{last_exercises}}", history);
   } else {
     template = prompts.exercise_generation.standard.prompt;
     finalPrompt = template
@@ -60,7 +64,7 @@ export async function GeneratePrompt({
   try {
     const result = await model.generateContent(finalPrompt);
     const response = result.response.text();
-    const clearResponse = response.replace(/``json\s?|``/g, "").trim();
+    const clearResponse = response.replace(/```json\s?|```/g, "").trim();
     const data = JSON.parse(clearResponse);
 
     const newExercise = await prisma.exercise.create({
@@ -75,8 +79,8 @@ export async function GeneratePrompt({
     });
 
     return newExercise;
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error("Error generating exercise:", error);
-    throw new Error("Failed to generate exercise");
+    throw new Error("Failed to generate exercise", { cause: error });
   }
 }
