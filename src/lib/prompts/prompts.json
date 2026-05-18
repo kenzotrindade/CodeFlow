@@ -6,7 +6,7 @@
     },
     "progressive": {
       "description": "Génère un exercice basé sur le précédent pour assurer une montée en compétence.",
-      "prompt": "L'utilisateur vient de réussir l'exercice '{{last_title}}'. Génère un nouvel exercice en {{language}} (difficulté {{difficulty}}) qui soit légèrement plus complexe ou qui aborde une notion complémentaire. Réponds exclusivement en JSON valide avec ce format : {\"title\": \"...\", \"statement\": \"...\", \"expectedOutput\": \"...\"}"
+      "prompt": "L'utilisateur vient de réussir l'exercice '{{last_exercises}}'. Génère un nouvel exercice en {{language}} (difficulté {{difficulty}}) qui soit légèrement plus complexe ou qui aborde une notion complémentaire. Réponds exclusivement en JSON valide avec ce format : {\"title\": \"...\", \"statement\": \"...\", \"expectedOutput\": \"...\"}"
     },
     "debug": {
       "description": "Génère un code buggé que l'utilisateur doit corriger.",

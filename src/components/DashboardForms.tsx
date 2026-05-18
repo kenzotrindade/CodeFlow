@@ -1,7 +1,7 @@
 "use client";
 
 import { Language, Difficulty } from "@prisma/client";
-import { GeneratePrompt } from "@/app/actions/generate";
+import { GeneratePrompt, promptForm } from "@/app/actions/generate";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
@@ -27,6 +27,7 @@ export default function DashboardForms({
       const exercise = await GeneratePrompt({
         language: lang,
         difficulty: selectedDiff as Difficulty,
+        promptArgs: promptForm.progressive,
       });
       router.push(`/exercise/${exercise.id}`);
     });

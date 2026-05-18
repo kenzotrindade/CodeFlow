@@ -5,7 +5,6 @@ import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
-import Email from "next-auth/providers/email";
 
 export async function updateAccount(formData: {
   name: string;
