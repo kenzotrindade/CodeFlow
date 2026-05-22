@@ -3,7 +3,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import prisma from "@/lib/prisma";
 import { Language, Difficulty } from "@prisma/client";
-import prompts from "@/lib/prompts/prompts.json";
+import { prompts } from "@/lib/prompts/prompts";
 import { auth } from "@/lib/auth";
 import { promptForm } from "@/lib/types";
 
@@ -20,45 +20,49 @@ export async function GeneratePrompt({
 }) {
   const session = await auth();
 
-  let template;
-  let finalPrompt;
-
-  if (promptArgs === promptForm.progressive) {
-    const exercises = await prisma.exercise.findMany({
-      where: { creatorId: session?.user?.id, languageId: language.id },
-      include: {
-        attempts: {
-          where: { userId: session?.user?.id },
-          orderBy: { createdAt: "desc" },
-        },
+  const exercises = await prisma.exercise.findMany({
+    where: { creatorId: session?.user?.id, languageId: language.id },
+    include: {
+      attempts: {
+        where: { userId: session?.user?.id },
+        orderBy: { createdAt: "desc" },
       },
-      orderBy: { createdAt: "desc" },
-    });
+    },
+    orderBy: { createdAt: "desc" },
+  });
 
-    const history = exercises
-      .map((e) => {
-        const status = e.attempts[0]?.status || "Non tenté";
-        return `- ${e.title} (${e.difficulty}, Statut: ${status})`;
-      })
-      .join("\n");
+  const history = exercises
+    .map((e) => {
+      const status = e.attempts[0]?.status || "Not try";
+      return `- ${e.title} (${e.difficulty}, Statut: ${status})`;
+    })
+    .join("\n");
 
-    const historyText =
-      history.length > 0 ? history : "No History, first exercise";
+  const historyText =
+    history.length > 0 ? history : "First exercise, no history.";
 
-    template = prompts.exercise_generation.progressive.prompt;
-    finalPrompt = template
-      .replaceAll("{{language}}", language.name)
-      .replaceAll("{{difficulty}}", difficulty)
-      .replaceAll("{{last_exercises}}", historyText);
-  } else {
-    template = prompts.exercise_generation.progressive.prompt;
-    finalPrompt = template
-      .replaceAll("{{language}}", language.name)
-      .replaceAll("{{difficulty}}", difficulty);
-  }
+  const levelGuidelines = prompts.exercise_generation.level_guidelines as any;
+  const langRules = levelGuidelines[language.slug] || levelGuidelines.general;
+  const specificRule =
+    langRules[difficulty as keyof typeof langRules] || langRules["EASY"];
+
+  const isCapstone = promptArgs === promptForm.capstone;
+  const template = isCapstone
+    ? prompts.project_generation.capstone_template
+    : prompts.exercise_generation.progressive_template;
+
+  const finalPrompt = template
+    .replaceAll(
+      "{{system_persona}}",
+      prompts.exercise_generation.system_persona,
+    )
+    .replaceAll("{{language}}", language.name)
+    .replaceAll("{{difficulty}}", difficulty)
+    .replaceAll("{{level_rules}}", specificRule)
+    .replaceAll("{{last_exercises}}", historyText);
 
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash",
+    model: "gemini-3.5-flash",
     generationConfig: {
       responseMimeType: "application/json",
     },
@@ -75,8 +79,8 @@ export async function GeneratePrompt({
         title: data.title,
         statement: data.statement,
         expectedOutput: data.expectedOutput,
-        notion: data.notion || null,
-        isCapstone: data.isCapstone || false,
+        notion: data.notion || (isCapstone ? "Projet de synthèse" : null),
+        isCapstone: data.isCapstone || isCapstone || false,
         difficulty: difficulty,
         languageId: language.id,
         creatorId: session?.user?.id || null,

@@ -1,6 +1,6 @@
 "use client";
 
-import { Language, Difficulty, Exercise } from "@prisma/client";
+import { Language, Difficulty } from "@prisma/client";
 import { GeneratePrompt } from "@/app/actions/generate";
 import { promptForm } from "@/lib/types";
 import { useRouter } from "next/navigation";
@@ -17,7 +17,7 @@ export default function DashboardForms({
   const [isPending, startTransition] = useTransition();
   const [selectedLangId, setSelectedLangId] = useState(languages[0]?.id);
   const [selectedDiff, setSelectedDiff] = useState(difficulties[0]);
-  const [showProjectModal, setShowProjetModal] = useState(false);
+  const [showProjectModal, setShowProjectModal] = useState(false);
   const [lastGeneratedId, setLastGeneratedId] = useState<string | null>(null);
 
   const handleGenerate = () => {
@@ -35,7 +35,7 @@ export default function DashboardForms({
 
       if (exercise.isCapstone) {
         setLastGeneratedId(exercise.id);
-        setShowProjetModal(true);
+        setShowProjectModal(true);
       } else {
         router.push(`/exercise/${exercise.id}`);
       }
@@ -75,12 +75,25 @@ export default function DashboardForms({
       </button>
 
       {showProjectModal && (
-        <div>
-          <h2>Congrats !</h2>
-          <p>You have complete the ${selectedDiff} module !</p>
-          <button
-            onClick={() => router.push(`/exercise/${lastGeneratedId}`)}
-          ></button>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded shadow-lg text-black flex flex-col items-center max-w-sm">
+            <h2 className="text-xl font-bold mb-2">Congrats !</h2>
+            <p className="mb-4 text-center">
+              You finish this module {selectedDiff} !
+            </p>
+            <button
+              onClick={() => router.push(`/exercise/${lastGeneratedId}`)}
+              className="bg-green-600 text-white px-4 py-2 rounded font-bold"
+            >
+              Go to project
+            </button>
+            <button
+              onClick={() => setShowProjectModal(false)}
+              className="mt-4 text-gray-500 text-sm underline"
+            >
+              Close
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -17,6 +17,11 @@ export default async function Navbar() {
           {session?.user ? (
             <ul className="flex gap-6 text-blue-500 underline">
               <li>
+                <Link href="/techwatch" className="hover:text-blue-400">
+                  TechWatch
+                </Link>
+              </li>
+              <li>
                 <Link href="/dashboard" className="hover:text-blue-400">
                   Dashboard
                 </Link>
