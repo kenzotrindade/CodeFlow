@@ -43,7 +43,7 @@ export default function Register() {
       if (loginRes?.error) {
         router.push("/login?registered=true");
       } else {
-        router.push("/dashboard");
+        router.push("/login");
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
