@@ -13,10 +13,13 @@ export async function completeExercise(exerciseId: string) {
     throw new Error("You are not connected");
   }
 
-  await prisma.exerciseAttempt.create({
-    data: {
+  await prisma.exerciseAttempt.updateMany({
+    where: {
       userId: session.user.id,
       exerciseId: exerciseId,
+      status: AttemptStatus.PENDING,
+    },
+    data: {
       status: AttemptStatus.PASSED,
     },
   });

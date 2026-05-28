@@ -4,7 +4,6 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import prisma from "@/lib/prisma";
 import { prompts } from "@/lib/prompts/prompts";
 import { auth } from "@/lib/auth";
-import { promptForm } from "@/lib/types";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
@@ -53,6 +52,14 @@ export async function TechwatchPrompt(data: {
         difficulty: "MEDIUM",
         languageId: data.languageId,
         creatorId: session?.user?.id || null,
+        attempts: {
+          create: session?.user?.id ? [
+            {
+              userId: session.user.id,
+              status: "PENDING",
+            }
+          ] : []
+        }
       },
     });
 

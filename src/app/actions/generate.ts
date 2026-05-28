@@ -84,6 +84,16 @@ export async function GeneratePrompt({
         difficulty: difficulty,
         languageId: language.id,
         creatorId: session?.user?.id || null,
+        attempts: {
+          create: session?.user?.id
+            ? [
+                {
+                  userId: session.user.id,
+                  status: "PENDING",
+                },
+              ]
+            : [],
+        },
       },
     });
 
