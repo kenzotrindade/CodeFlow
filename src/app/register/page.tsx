@@ -15,6 +15,13 @@ export default function Register() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const passwordRules = [
+    { label: "12+ characters", test: (pw) => pw.length >= 12 },
+    { label: "Uppercase", test: (pw) => /[A-Z]/.test(pw) },
+    { label: "Lowercase", test: (pw) => /[a-z]/.test(pw) },
+    { label: "Number", test: (pw) => /[0-9]/.test(pw) },
+    { label: "Special character", test: (pw) => /[@$!%*?&]/.test(pw) },
+  ];
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -94,6 +101,25 @@ export default function Register() {
           required
           disabled={loading}
         />
+        <div className="mt-2 space-y-1">
+          {passwordRules.map((rule, i) => {
+            const isOk = rule.test(password);
+            return (
+              <div
+                key={i}
+                className={`text-xs flex items-center gap-1 ${isOk ? "text-green-600" : "text-gray-800"}`}
+              >
+                <span>
+                  {isOk ? (
+                    <span>{rule.label + " OK"}</span>
+                  ) : (
+                    <span>{rule.label + " NO"}</span>
+                  )}
+                </span>
+              </div>
+            );
+          })}
+        </div>
         <button
           type="submit"
           className={`p-2 rounded text-white font-semibold ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-800"}`}

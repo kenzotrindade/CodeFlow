@@ -18,7 +18,7 @@ export default async function ExercisePage({
     notFound();
   }
 
-  const completeExercice = completeExercise.bind(null, id)
+  const completeExercice = completeExercise.bind(null, id);
 
   return (
     <div className="p-4 flex flex-col">
@@ -31,7 +31,9 @@ export default async function ExercisePage({
       <p>{exercise.statement}</p>
 
       <form action={completeExercice}>
-        <button type="submit">I have finished</button>
+        <button type="submit" className="p-2 bg-blue-300 hover:cursor-pointer">
+          I have finished
+        </button>
       </form>
     </div>
   );
