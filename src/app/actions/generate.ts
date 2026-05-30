@@ -1,13 +1,16 @@
 "use server";
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from "openai";
 import prisma from "@/lib/prisma";
 import { Language, Difficulty } from "@prisma/client";
 import { prompts } from "@/lib/prompts/prompts";
 import { auth } from "@/lib/auth";
 import { promptForm } from "@/lib/types";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
+const client = new OpenAI({
+  baseURL: "https://api.groq.com/openai/v1",
+  apiKey: process.env.GROQ_API_KEY as string,
+});
 
 export async function GeneratePrompt({
   language,
@@ -61,18 +64,19 @@ export async function GeneratePrompt({
     .replaceAll("{{level_rules}}", specificRule)
     .replaceAll("{{last_exercises}}", historyText);
 
-  const model = genAI.getGenerativeModel({
-    model: "gemini-3.5-flash",
-    generationConfig: {
-      responseMimeType: "application/json",
-    },
-  });
-
   try {
-    const result = await model.generateContent(finalPrompt);
-    const response = result.response.text();
-    const clearResponse = response.replace(/```json\s?|```/g, "").trim();
-    const data = JSON.parse(clearResponse);
+    const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        {
+          role: "user",
+          content: finalPrompt,
+        },
+      ],
+      response_format: { type: "json_object" },
+    });
+
+    const data = JSON.parse(completion.choices[0].message.content!);
 
     const newExercise = await prisma.exercise.create({
       data: {

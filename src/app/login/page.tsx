@@ -3,10 +3,7 @@
 import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-
-// #################################
-// ### Login Page & Auth
-// #################################
+import Link from "next/link";
 
 function LoginContent() {
   const [email, setEmail] = useState("");
@@ -30,7 +27,7 @@ function LoginContent() {
     });
 
     if (res?.error) {
-      setError("Invalid email or password");
+      setError("Email ou mot de passe invalide");
       setLoading(false);
     } else {
       router.push("/dashboard");
@@ -39,65 +36,76 @@ function LoginContent() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-80">
-        <h1 className="text-2xl font-bold">Login</h1>
+    <div className="flex flex-col items-center justify-center min-h-[80vh] px-6">
+      <div className="card-fragment w-full max-w-md">
+        <h1 className="text-4xl font-black italic mb-8 tracking-tighter uppercase">
+          CONNEXION
+        </h1>
 
         {isRegistered && !error && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded text-sm">
-            Account created, please login !
+          <div className="mb-6 p-4 bg-green-500/10 border-l-4 border-green-500 text-green-200 text-xs font-bold uppercase tracking-widest">
+            Compte créé. Identifiez-vous.
           </div>
         )}
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded text-sm">
+          <div className="mb-6 p-4 bg-red-500/10 border-l-4 border-red-500 text-red-200 text-xs font-bold uppercase tracking-widest">
             {error}
           </div>
         )}
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="p-2 border rounded text-black"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          disabled={loading}
-        />
-        <input
-          type="password"
-          placeholder="Mot de passe"
-          className="p-2 border rounded text-black"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          disabled={loading}
-        />
-        <button
-          type="submit"
-          className={`p-2 rounded text-white font-semibold ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
-          disabled={loading}
-        >
-          {loading ? "Login in progress..." : "Login"}
-        </button>
-      </form>
-      <div className="mt-4 text-center">
-        <button
-          onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
-          className="text-blue-600 hover:underline text-sm disabled:opacity-50"
-          disabled={loading}
-        >
-          Login with Github
-        </button>
-        <p className="mt-4 text-sm text-gray-600">
-          Don&apos;t have any account ?{" "}
-          <a
-            href="/register"
-            className="text-blue-600 hover:underline font-medium"
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <div className="space-y-1">
+            <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">Identifiant Email</label>
+            <input
+              type="email"
+              placeholder="votre@email.com"
+              className="input-prism"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={loading}
+            />
+          </div>
+          
+          <div className="space-y-1">
+            <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">Clef d'accès</label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              className="input-prism"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <button
+            type="submit"
+            className={`btn-prism w-full mt-4 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={loading}
           >
-            Register
-          </a>
-        </p>
+            {loading ? "INITIALISATION..." : "ENTRER DANS LE FLUX"}
+          </button>
+        </form>
+
+        <div className="mt-12 flex flex-col gap-6 items-center">
+          <button
+            onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
+            className="text-[10px] uppercase tracking-[0.2em] font-bold hover:text-pink-500 transition-colors border-b border-white/10 pb-1"
+            disabled={loading}
+          >
+            Continuer avec GitHub
+          </button>
+          
+          <p className="text-xs text-purple-200/40 font-medium italic">
+            Nouveau ici ?{" "}
+            <Link href="/register" className="text-pink-500 hover:underline">
+              Créez votre fragment
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -105,7 +113,7 @@ function LoginContent() {
 
 export default function Login() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="text-white font-black italic animate-pulse p-20">CHARGEMENT...</div>}>
       <LoginContent />
     </Suspense>
   );

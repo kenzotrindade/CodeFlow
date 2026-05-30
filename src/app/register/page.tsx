@@ -3,10 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
-// #################################
-// ### Register Page & Auth
-// #################################
+import Link from "next/link";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -15,12 +12,13 @@ export default function Register() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
   const passwordRules = [
-    { label: "12+ characters", test: (pw) => pw.length >= 12 },
-    { label: "Uppercase", test: (pw) => /[A-Z]/.test(pw) },
-    { label: "Lowercase", test: (pw) => /[a-z]/.test(pw) },
-    { label: "Number", test: (pw) => /[0-9]/.test(pw) },
-    { label: "Special character", test: (pw) => /[@$!%*?&]/.test(pw) },
+    { label: "8+ caractères", test: (pw: string) => pw.length >= 12 },
+    { label: "Majuscule", test: (pw: string) => /[A-Z]/.test(pw) },
+    { label: "Minuscule", test: (pw: string) => /[a-z]/.test(pw) },
+    { label: "Chiffre", test: (pw: string) => /[0-9]/.test(pw) },
+    { label: "Symbole", test: (pw: string) => /[@$!%*?&]/.test(pw) },
   ];
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -38,104 +36,128 @@ export default function Register() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "Register error");
+        throw new Error(data.error || "Erreur lors de l'inscription");
       }
 
-      const loginRes = await signIn("credentials", {
+      await signIn("credentials", {
         email,
         password,
-        redirect: false,
+        callbackUrl: "/dashboard",
       });
-
-      if (loginRes?.error) {
-        router.push("/login?registered=true");
-      } else {
-        router.push("/login");
-      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError("Unkown error during register");
+        setError("Erreur inconnue");
       }
-    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-80">
-        <h1 className="text-2xl font-bold">Inscription</h1>
+    <div className="flex flex-col items-center justify-center min-h-[80vh] px-6">
+      <div className="card-fragment w-full max-w-md">
+        <h1
+          className="text-4xl font-black italic mb-8 tracking-tighter uppercase text-transparent"
+          style={{ WebkitTextStroke: "1px white" }}
+        >
+          INSCRIPTION
+        </h1>
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded text-sm">
+          <div className="mb-6 p-4 bg-red-500/10 border-l-4 border-red-500 text-red-200 text-xs font-bold uppercase tracking-widest">
             {error}
           </div>
         )}
 
-        <input
-          type="text"
-          placeholder="Nom"
-          className="p-2 border rounded text-black"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          disabled={loading}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          className="p-2 border rounded text-black"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          disabled={loading}
-        />
-        <input
-          type="password"
-          placeholder="Mot de passe"
-          className="p-2 border rounded text-black"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          disabled={loading}
-        />
-        <div className="mt-2 space-y-1">
-          {passwordRules.map((rule, i) => {
-            const isOk = rule.test(password);
-            return (
-              <div
-                key={i}
-                className={`text-xs flex items-center gap-1 ${isOk ? "text-green-600" : "text-gray-800"}`}
-              >
-                <span>
-                  {isOk ? (
-                    <span>{rule.label + " OK"}</span>
-                  ) : (
-                    <span>{rule.label + " NO"}</span>
-                  )}
-                </span>
-              </div>
-            );
-          })}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="space-y-1">
+            <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">
+              Alias
+            </label>
+            <input
+              type="text"
+              placeholder="Votre nom"
+              className="input-prism"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">
+              Identifiant Email
+            </label>
+            <input
+              type="email"
+              placeholder="votre@email.com"
+              className="input-prism"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">
+              Clef d'accès
+            </label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              className="input-prism"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 my-2">
+            {passwordRules.map((rule, i) => {
+              const isOk = rule.test(password);
+              return (
+                <div
+                  key={i}
+                  className={`text-[9px] uppercase tracking-tighter font-bold flex items-center gap-2 ${isOk ? "text-green-400" : "text-purple-100/20"}`}
+                >
+                  <div
+                    className={`w-1 h-1 rotate-45 ${isOk ? "bg-green-400" : "bg-purple-100/20"}`}
+                  />
+                  {rule.label}
+                </div>
+              );
+            })}
+          </div>
+
+          <button
+            type="submit"
+            className={`btn-prism w-full mt-4 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={loading}
+          >
+            {loading ? "GÉNÉRATION..." : "FORGER LE COMPTE"}
+          </button>
+        </form>
+
+        <div className="mt-12 flex flex-col gap-6 items-center">
+          <button
+            onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
+            className="text-[10px] uppercase tracking-[0.2em] font-bold hover:text-pink-500 transition-colors border-b border-white/10 pb-1"
+            disabled={loading}
+          >
+            S'inscrire avec GitHub
+          </button>
+
+          <p className="text-xs text-purple-200/40 font-medium italic">
+            Déjà un fragment ?{" "}
+            <Link href="/login" className="text-pink-500 hover:underline">
+              Connectez-vous
+            </Link>
+          </p>
         </div>
-        <button
-          type="submit"
-          className={`p-2 rounded text-white font-semibold ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-800"}`}
-          disabled={loading}
-        >
-          {loading ? "Registering..." : "Register"}
-        </button>
-      </form>
-      <div className="mt-4">
-        <button
-          onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
-          className="text-blue-600 hover:underline text-sm disabled:opacity-50"
-          disabled={loading}
-        >
-          Register with Github
-        </button>
       </div>
     </div>
   );

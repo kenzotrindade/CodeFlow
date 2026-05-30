@@ -39,43 +39,65 @@ export default function TechWatchList({
   };
 
   return (
-    <div>
-      <select
-        value={selectedLangId}
-        onChange={(e) => setSelectedLangId(e.target.value)}
-        className="border p-2 rounded text-black"
-      >
-        {languages.map((lang) => (
-          <option key={lang.id} value={lang.id}>
-            {lang.name}
-          </option>
-        ))}
-      </select>
-      <div className="">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {articles.map((art, index) => (
-            <div
-              key={index}
-              className="border p-4 rounded shadow hover:shadow-md transition"
-            >
-              <h3>{art.title}</h3>
-              <p>{art.description}</p>
+    <div className="space-y-12">
+      <div className="card-fragment max-w-sm border-l-2 border-pink-500">
+        <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50 mb-4 block">
+          Langage cible pour la conversion
+        </label>
+        <select
+          value={selectedLangId}
+          onChange={(e) => setSelectedLangId(e.target.value)}
+          className="input-prism w-full appearance-none cursor-pointer"
+        >
+          {languages.map((lang) => (
+            <option key={lang.id} value={lang.id} className="bg-[#1a0b2e]">
+              {lang.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {articles.map((art, index) => (
+          <div
+            key={index}
+            className="card-fragment group flex flex-col justify-between hover:bg-white/[0.04] transition-all"
+          >
+            <div>
+              <div className="mb-6 flex items-center gap-2">
+                <div className="w-8 h-[1px] bg-pink-500" />
+                <span className="text-[9px] font-mono text-purple-100/30 uppercase tracking-widest">
+                  Article Flux dev.to
+                </span>
+              </div>
+              <h3 className="text-xl font-bold uppercase tracking-tighter mb-4 leading-tight group-hover:text-pink-400 transition-colors">
+                {art.title}
+              </h3>
+              <p className="text-sm text-purple-100/40 leading-relaxed mb-6 line-clamp-3 italic">
+                {art.description}
+              </p>
+            </div>
+
+            <div className="space-y-4">
               <a
                 href={art.url}
                 target="_blank"
-                className="text-blue-500 hover:text-blue-400"
+                className="text-[10px] uppercase tracking-widest font-bold text-pink-500/60 hover:text-pink-500 transition-colors block border-b border-pink-500/10 pb-2 w-fit"
               >
-                {art.url}
+                Lire la source ↗
               </a>
               <button
                 onClick={() => handleGenerate(art, index)}
                 disabled={isPending}
+                className="btn-prism w-full py-2 text-xs"
               >
-                {loadingId === index ? "Generation..." : "Generate"}
+                {loadingId === index
+                  ? "CRISTALLISATION..."
+                  : "CONVERTIR EN DÉFI"}
               </button>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );

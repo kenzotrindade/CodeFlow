@@ -1,32 +1,123 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0f172a;
-  --foreground: #f8fafc;
-  --card: #1e293b;
-  --primary: #3b82f6;
-  --secondary: #64748b;
-  --accent: #2dd4bf;
-  --border: #334155;
+  --prism-deep: #0a0414;
+  --prism-violet: #5b21b6;
+  --prism-neon: #a855f7;
+  --prism-accent: #ec4899;
+  --glass: rgba(255, 255, 255, 0.03);
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--prism-deep);
+  color: #f3f4f6;
   font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
-input, select {
-  background-color: #1e293b !important;
-  border-color: #334155 !important;
-  color: #f8fafc !important;
+/* Texture de grain */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  opacity: 0.05;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  z-index: 100;
 }
 
-input:focus, select:focus {
-  outline: 2px solid var(--primary);
-  border-color: transparent !important;
+/* Formes Prisma */
+.prisma-shape {
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  background: linear-gradient(135deg, var(--prism-violet), transparent);
+  filter: blur(60px);
+  position: absolute;
+  z-index: -1;
 }
 
-button {
-  transition: all 0.2s ease-in-out;
+/* Boutons Angulaires */
+.btn-prism {
+  position: relative;
+  padding: 0.75rem 2rem;
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+  background: var(--prism-violet);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: white;
+  border: none !important;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-prism:hover {
+  clip-path: polygon(0 0, 90% 0, 100% 100%, 10% 100%);
+  background: var(--prism-neon);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.btn-prism-outline {
+  position: relative;
+  padding: 0.75rem 2rem;
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  transition: all 0.3s ease;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-prism-outline:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: var(--prism-accent);
+}
+
+/* Inputs "Crystalline" */
+.input-prism {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: none !important;
+  border-left: 2px solid var(--prism-violet) !important;
+  padding: 1rem !important;
+  color: white !important;
+  transition: all 0.3s ease;
+  clip-path: polygon(0 0, 100% 0, 95% 100%, 0 100%);
+  width: 100%;
+}
+
+.input-prism:focus {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-left: 2px solid var(--prism-neon) !important;
+  outline: none !important;
+}
+
+/* Cartes "Fragments" */
+.card-fragment {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+.card-fragment::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%; width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--prism-accent), transparent);
+  transition: all 0.5s ease;
+}
+
+.card-fragment:hover::before {
+  left: 100%;
+}
+
+.mix-diff {
+  mix-blend-mode: difference;
 }

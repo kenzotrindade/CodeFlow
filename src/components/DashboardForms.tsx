@@ -2,9 +2,9 @@
 
 import { Language, Difficulty } from "@prisma/client";
 import { GeneratePrompt } from "@/app/actions/generate";
-import { promptForm } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { promptForm } from "@/lib/types";
 
 export default function DashboardForms({
   languages,
@@ -23,9 +23,7 @@ export default function DashboardForms({
   const handleGenerate = () => {
     startTransition(async () => {
       const lang = languages.find((l) => l.id === selectedLangId);
-      if (!lang) {
-        return;
-      }
+      if (!lang) return;
 
       const exercise = await GeneratePrompt({
         language: lang,
@@ -41,58 +39,71 @@ export default function DashboardForms({
       }
     });
   };
+
   return (
-    <div>
-      <select
-        value={selectedLangId}
-        onChange={(e) => setSelectedLangId(e.target.value)}
-        className="border p-2 rounded text-black"
-      >
-        {languages.map((lang) => (
-          <option key={lang.id} value={lang.id}>
-            {lang.name}
-          </option>
-        ))}
-      </select>
-      <select
-        value={selectedDiff}
-        onChange={(e) => setSelectedDiff(e.target.value)}
-        className="border p-2 rounded text-black"
-      >
-        {difficulties.map((level) => (
-          <option key={level} value={level}>
-            {level}
-          </option>
-        ))}
-      </select>
+    <div className="flex flex-col gap-8">
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">Langage</label>
+          <select
+            value={selectedLangId}
+            onChange={(e) => setSelectedLangId(e.target.value)}
+            className="input-prism w-full appearance-none cursor-pointer"
+          >
+            {languages.map((lang) => (
+              <option key={lang.id} value={lang.id} className="bg-[#1a0b2e]">
+                {lang.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">Difficulté</label>
+          <select
+            value={selectedDiff}
+            onChange={(e) => setSelectedDiff(e.target.value)}
+            className="input-prism w-full appearance-none cursor-pointer"
+          >
+            {difficulties.map((level) => (
+              <option key={level} value={level} className="bg-[#1a0b2e]">
+                {level}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
 
       <button
         onClick={handleGenerate}
         disabled={isPending}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        className={`btn-prism w-full ${isPending ? "opacity-50" : ""}`}
       >
-        {isPending ? "Generation..." : "Generate"}
+        {isPending ? "SCULPTURE..." : "GÉNÉRER LE DÉFI"}
       </button>
 
       {showProjectModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded shadow-lg text-black flex flex-col items-center max-w-sm">
-            <h2 className="text-xl font-bold mb-2">Congrats !</h2>
-            <p className="mb-4 text-center">
-              You finish this module {selectedDiff} !
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
+          <div className="card-fragment max-w-sm w-full border-pink-500 border-2 text-center">
+            <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-4">Bravo !</h2>
+            <p className="text-purple-200/60 text-sm mb-8 leading-relaxed">
+              Vous avez complété ce module de niveau <span className="text-pink-500 font-bold">{selectedDiff}</span>. 
+              Un projet final vous attend.
             </p>
-            <button
-              onClick={() => router.push(`/exercise/${lastGeneratedId}`)}
-              className="bg-green-600 text-white px-4 py-2 rounded font-bold"
-            >
-              Go to project
-            </button>
-            <button
-              onClick={() => setShowProjectModal(false)}
-              className="mt-4 text-gray-500 text-sm underline"
-            >
-              Close
-            </button>
+            <div className="flex flex-col gap-4">
+              <button
+                onClick={() => router.push(`/exercise/${lastGeneratedId}`)}
+                className="btn-prism w-full"
+              >
+                ACCÉDER AU PROJET
+              </button>
+              <button
+                onClick={() => setShowProjectModal(false)}
+                className="text-[10px] uppercase tracking-widest font-bold opacity-40 hover:opacity-100 transition-opacity"
+              >
+                Plus tard
+              </button>
+            </div>
           </div>
         </div>
       )}
