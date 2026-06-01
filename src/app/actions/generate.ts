@@ -51,7 +51,7 @@ export async function GeneratePrompt({
 
   const isCapstone = promptArgs === promptForm.capstone;
   const template = isCapstone
-    ? prompts.project_generation.capstone_template
+    ? prompts.exercise_generation.capstone_template
     : prompts.exercise_generation.progressive_template;
 
   const finalPrompt = template
@@ -102,7 +102,7 @@ export async function GeneratePrompt({
     });
 
     return newExercise;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error generating exercise:", error);
     throw new Error("Failed to generate exercise", { cause: error });
   }

@@ -1,11 +1,14 @@
 "use server";
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from "openai";
 import prisma from "@/lib/prisma";
 import { prompts } from "@/lib/prompts/prompts";
 import { auth } from "@/lib/auth";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
+const client = new OpenAI({
+  baseURL: "https://api.groq.com/openai/v1",
+  apiKey: process.env.GROQ_API_KEY as string,
+});
 
 export async function TechwatchPrompt(data: {
   title: string;
@@ -30,18 +33,19 @@ export async function TechwatchPrompt(data: {
     .replaceAll("{{article_description}}", data.description)
     .replaceAll("{{language}}", data.languageName);
 
-  const model = genAI.getGenerativeModel({
-    model: "gemini-3.5-flash",
-    generationConfig: {
-      responseMimeType: "application/json",
-    },
-  });
-
   try {
-    const result = await model.generateContent(finalPrompt);
-    const response = result.response.text();
-    const clearResponse = response.replace(/```json\s?|```/g, "").trim();
-    const exerciseData = JSON.parse(clearResponse);
+    const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        {
+          role: "user",
+          content: finalPrompt,
+        },
+      ],
+      response_format: { type: "json_object" },
+    });
+
+    const exerciseData = JSON.parse(completion.choices[0].message.content!);
 
     const newExercise = await prisma.exercise.create({
       data: {
@@ -64,8 +68,8 @@ export async function TechwatchPrompt(data: {
     });
 
     return newExercise;
-  } catch (error: any) {
-    console.error("Error failing generate techwatch exercise");
+  } catch (error: unknown) {
+    console.error("Error failing generate techwatch exercise", error);
     throw new Error("Failed to generate techwatch's exercise", {
       cause: error,
     });

@@ -56,8 +56,11 @@ function LoginContent() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <div className="space-y-1">
-            <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">Identifiant Email</label>
+            <label htmlFor="email" className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">
+              Identifiant Email
+            </label>
             <input
+              id="email"
               type="email"
               placeholder="votre@email.com"
               className="input-prism"
@@ -67,10 +70,13 @@ function LoginContent() {
               disabled={loading}
             />
           </div>
-          
+
           <div className="space-y-1">
-            <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">Clef d'accès</label>
+            <label htmlFor="password" className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">
+              Clef d&apos;accès
+            </label>
             <input
+              id="password"
               type="password"
               placeholder="••••••••"
               className="input-prism"
@@ -98,7 +104,7 @@ function LoginContent() {
           >
             Continuer avec GitHub
           </button>
-          
+
           <p className="text-xs text-purple-200/40 font-medium italic">
             Nouveau ici ?{" "}
             <Link href="/register" className="text-pink-500 hover:underline">
@@ -113,7 +119,13 @@ function LoginContent() {
 
 export default function Login() {
   return (
-    <Suspense fallback={<div className="text-white font-black italic animate-pulse p-20">CHARGEMENT...</div>}>
+    <Suspense
+      fallback={
+        <div className="text-white font-black italic animate-pulse p-20">
+          CHARGEMENT...
+        </div>
+      }
+    >
       <LoginContent />
     </Suspense>
   );

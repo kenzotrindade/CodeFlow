@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function Register() {
@@ -11,7 +10,6 @@ export default function Register() {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const passwordRules = [
     { label: "8+ caractères", test: (pw: string) => pw.length >= 12 },
@@ -42,7 +40,7 @@ export default function Register() {
       await signIn("credentials", {
         email,
         password,
-        callbackUrl: "/dashboard",
+        callbackUrl: "/login",
       });
     } catch (err: unknown) {
       if (err instanceof Error) {
