@@ -45,9 +45,9 @@ export async function GeneratePrompt({
     history.length > 0 ? history : "First exercise, no history.";
 
   const levelGuidelines = prompts.exercise_generation.level_guidelines as any;
-  const langRules = levelGuidelines[language.slug] || levelGuidelines.general;
-  const specificRule =
-    langRules[difficulty as keyof typeof langRules] || langRules["EASY"];
+  const langKey = language.name.toLowerCase();
+  const langRules = levelGuidelines[langKey] || levelGuidelines.general;
+  const specificRule = langRules[difficulty as keyof typeof langRules] || langRules["EASY"];
 
   const isCapstone = promptArgs === promptForm.capstone;
   const template = isCapstone
