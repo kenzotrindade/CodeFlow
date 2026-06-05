@@ -7,14 +7,26 @@ import { TechwatchPrompt } from "@/app/actions/techwatch";
 export default function TechWatchList({
   articles,
   languages,
+  currentTag,
 }: {
   articles: any[];
   languages: any[];
+  currentTag: string;
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [selectedLangId, setSelectedLangId] = useState(languages[0]?.id);
+  const currentLang =
+    languages.find((l) => l.slug === currentTag) || languages[0];
+  const [selectedLangId, setSelectedLangId] = useState(currentLang?.id);
   const [loadingId, setLoadingId] = useState<number | null>(null);
+
+  const handleLangChange = (id: string) => {
+    setSelectedLangId(id);
+    const lang = languages.find((l) => l.id === id);
+    if (lang) {
+      router.push(`/techwatch?tag=${lang.slug}`);
+    }
+  };
 
   const handleGenerate = (art: any, index: number) => {
     setLoadingId(index);
@@ -24,6 +36,7 @@ export default function TechWatchList({
         setLoadingId(null);
         return;
       }
+
       const exercise = await TechwatchPrompt({
         title: art.title,
         description: art.description,
@@ -46,7 +59,7 @@ export default function TechWatchList({
         </label>
         <select
           value={selectedLangId}
-          onChange={(e) => setSelectedLangId(e.target.value)}
+          onChange={(e) => handleLangChange(e.target.value)}
           className="input-prism w-full appearance-none cursor-pointer"
         >
           {languages.map((lang) => (
@@ -65,7 +78,7 @@ export default function TechWatchList({
           >
             <div>
               <div className="mb-6 flex items-center gap-2">
-                <div className="w-8 h-[1px] bg-pink-500" />
+                <div className="w-8 h-px bg-pink-500" />
                 <span className="text-[9px] font-mono text-purple-100/30 uppercase tracking-widest">
                   Article Flux dev.to
                 </span>

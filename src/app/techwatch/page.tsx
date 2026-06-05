@@ -1,10 +1,18 @@
 import prisma from "@/lib/prisma";
 import TechWatchList from "@/components/TechWatchList";
 
-export default async function TechWatchPage() {
+export default async function TechWatchPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tag?: string }>;
+}) {
+  const { tag } = await searchParams;
+  const currentTag = tag || "javascript";
   const res = await fetch(
-    "https://dev.to/api/articles?tag=programming&per_page=9",
-    { next: { revalidate: 3600 } },
+    `https://dev.to/api/articles?tag=${currentTag}&per_page=9`,
+    {
+      next: { revalidate: 3600 },
+    },
   );
 
   const articles = await res.json();
@@ -22,7 +30,11 @@ export default async function TechWatchPage() {
         </p>
       </div>
 
-      <TechWatchList articles={articles} languages={languages} />
+      <TechWatchList
+        articles={Array.isArray(articles) ? articles : []}
+        languages={languages}
+        currentTag={currentTag}
+      />
     </div>
   );
 }
