@@ -9,6 +9,18 @@ export const REGEX = {
   EMAIL: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
 };
 
+export type LevelRule = {
+  EASY: string;
+  MEDIUM: string;
+  HARD: string;
+  EXPERT: string;
+};
+
+export type LevelGuideLine = {
+  [key: string]: LevelRule | undefined;
+  general: LevelRule;
+};
+
 export const VALIDATION_MESSAGE = {
   PASSWORD:
     "Password must be at least 12 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.",

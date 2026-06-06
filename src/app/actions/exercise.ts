@@ -10,7 +10,7 @@ export async function completeExercise(exerciseId: string) {
   const session = await auth();
 
   if (!session?.user?.id) {
-    throw new Error("You are not connected");
+    throw new Error("Vous n'êtes pas connecté !");
   }
 
   await prisma.exerciseAttempt.updateMany({

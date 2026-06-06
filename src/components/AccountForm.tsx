@@ -11,11 +11,12 @@ interface AccountFormProps {
   };
 }
 
-export default function AccountForm({ user }: AccountFormProps) {
+export default function AccountForm({ user }: Readonly<AccountFormProps>) {
   const [name, setName] = useState(user.name || "");
   const [email, setEmail] = useState(user.email || "");
   const [password, setPassword] = useState("");
   const [isPending, setIsPending] = useState(false);
+
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;

@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 import { Language, Difficulty } from "@prisma/client";
 import { prompts } from "@/lib/prompts/prompts";
 import { auth } from "@/lib/auth";
-import { promptForm } from "@/lib/types";
+import { promptForm, LevelRule, LevelGuideLine } from "@/lib/types";
 
 const client = new OpenAI({
   baseURL: "https://api.groq.com/openai/v1",
@@ -32,27 +32,28 @@ export async function GeneratePrompt({
       },
     },
     orderBy: { createdAt: "desc" },
-  });
+  }); // Récupération des exercises fait ET non fait
 
   const history = exercises
     .map((e) => {
       const status = e.attempts[0]?.status || "Not try";
       return `- ${e.title} (${e.difficulty}, Statut: ${status})`;
     })
-    .join("\n");
+    .join("\n"); // Join pour faire un saut de ligne à toutes les lignes car si c'est dans le return ce sera tout sauf la dernière
 
   const historyText =
-    history.length > 0 ? history : "First exercise, no history.";
+    history.length > 0 ? history : "Premier exercice, pas d'historique."; // Récupération de l'historique de l'utilisateur uniquement
 
-  const levelGuidelines = prompts.exercise_generation.level_guidelines as any;
+  const levelGuidelines = prompts.exercise_generation.level_guidelines as LevelGuideLine;
   const langKey = language.name.toLowerCase();
   const langRules = levelGuidelines[langKey] || levelGuidelines.general;
-  const specificRule = langRules[difficulty as keyof typeof langRules] || langRules["EASY"];
+  const specificRule =
+    langRules[difficulty as keyof typeof langRules] || langRules["EASY"];
 
   const isCapstone = promptArgs === promptForm.capstone;
   const template = isCapstone
     ? prompts.exercise_generation.capstone_template
-    : prompts.exercise_generation.progressive_template;
+    : prompts.exercise_generation.progressive;
 
   const finalPrompt = template
     .replaceAll(
