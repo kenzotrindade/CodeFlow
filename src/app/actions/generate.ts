@@ -36,6 +36,7 @@ export async function GeneratePrompt({
       },
     },
     orderBy: { createdAt: "desc" },
+    take: 20,
   }); // Récupération des exercises fait ET non fait
 
   const history = exercises
@@ -46,7 +47,9 @@ export async function GeneratePrompt({
     .join("\n"); // Join pour faire un saut de ligne à toutes les lignes car si c'est dans le return ce sera tout sauf la dernière
 
   const historyText =
-    history.length > 0 ? history : "Premier exercice, pas d'historique."; // Récupération de l'historique de l'utilisateur uniquement
+    history.length > 0
+      ? history
+      : "L'utilisateur n'a pas d'historique dans ce langage et cette difficulté."; // Récupération de l'historique de l'utilisateur uniquement
 
   const levelGuidelines = prompts.exercise_generation
     .level_guidelines as LevelGuideLine;
@@ -57,7 +60,13 @@ export async function GeneratePrompt({
   const isCapstone = promptArgs === promptForm.capstone;
   const template = isCapstone
     ? prompts.exercise_generation.capstone_template
-    : prompts.exercise_generation.progressive;
+    : prompts.exercise_generation.progressive_template;
+
+  if (!template) {
+    throw new Error(
+      `Template non trouvé pour le mode: ${isCapstone ? "Capstone" : "Progressive"}`,
+    );
+  }
 
   const finalPrompt = template
     .replaceAll(
@@ -81,13 +90,25 @@ export async function GeneratePrompt({
       response_format: { type: "json_object" },
     });
 
-    const data = JSON.parse(completion.choices[0].message.content!);
+    if (!completion.choices[0].message.content) {
+      return;
+    }
+
+    const data = JSON.parse(completion.choices[0].message.content);
+    const luminaHeader = data.lumina_message
+      ? `### MESSAGE DE LUMINA\n${data.lumina_message}\n\n---\n\n`
+      : "";
+
+    const formattedExpectedOutput =
+      typeof data.expectedOutput === "object"
+        ? JSON.stringify(data.expectedOutput, null, 2)
+        : data.expectedOutput;
 
     const newExercise = await prisma.exercise.create({
       data: {
         title: data.title,
-        statement: data.statement,
-        expectedOutput: data.expectedOutput,
+        statement: `${luminaHeader}${data.statement}`,
+        expectedOutput: formattedExpectedOutput,
         notion: data.notion || (isCapstone ? "Projet de synthèse" : null),
         isCapstone: data.isCapstone || isCapstone || false,
         difficulty: difficulty,

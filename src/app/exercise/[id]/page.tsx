@@ -2,10 +2,7 @@ import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { completeExercise } from "@/app/actions/exercise";
-
-// #################################
-// ### Exercise Page
-// #################################
+import LuminaChat from "@/components/LuminaChat";
 
 export default async function ExercisePage({
   params,
@@ -48,13 +45,8 @@ export default async function ExercisePage({
       </div>
 
       <div className="grid grid-cols-1 gap-12">
-        <div className="card-fragment bg-white/3 border-l-4 border-pink-500 p-12">
-          <h2 className="text-xs font-black uppercase tracking-[0.4em] text-pink-500 mb-8">
-            Énoncé du Défi
-          </h2>
-          <div className="text-l md:text-xl text-purple-100/80 leading-relaxed font-light italic whitespace-pre-wrap">
-            {exercise.statement}
-          </div>
+        <div>
+          <LuminaChat statement={exercise.statement} />
 
           <div className="mt-16 pt-12 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
             <p className="text-xs text-purple-100/30 max-w-md italic">

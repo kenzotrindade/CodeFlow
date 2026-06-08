@@ -55,27 +55,30 @@ export async function TechwatchPrompt(data: {
       return;
     }
 
-    const exerciseData = JSON.parse(content);
+    const exerciseData = JSON.parse(completion.choices[0].message.content!);
+    const luminaHeader = exerciseData.lumina_message ? `### MESSAGE DE LUMINA\n${exerciseData.lumina_message}\n\n---\n\n` : "";
+
+    const formattedExpectedOutput = typeof exerciseData.expectedOutput === 'object' 
+      ? JSON.stringify(exerciseData.expectedOutput, null, 2) 
+      : exerciseData.expectedOutput;
 
     const newExercise = await prisma.exercise.create({
       data: {
         title: exerciseData.title,
-        statement: exerciseData.statement,
-        expectedOutput: exerciseData.expectedOutput,
+        statement: `${luminaHeader}${exerciseData.statement}`,
+        expectedOutput: formattedExpectedOutput,
         notion: exerciseData.notion,
         difficulty: "MEDIUM",
         languageId: data.languageId,
         creatorId: session?.user?.id || null,
         attempts: {
-          create: session?.user?.id
-            ? [
-                {
-                  userId: session.user.id,
-                  status: "PENDING",
-                },
-              ]
-            : [],
-        },
+          create: session?.user?.id ? [
+            {
+              userId: session.user.id,
+              status: "PENDING",
+            }
+          ] : []
+        }
       },
     });
 

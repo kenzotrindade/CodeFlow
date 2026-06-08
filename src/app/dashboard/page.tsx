@@ -1,8 +1,9 @@
 import prisma from "@/lib/prisma";
-import { Difficulty } from "@prisma/client";
+import { AttemptStatus, Difficulty } from "@prisma/client";
 import DashboardForms from "@/components/DashboardForms";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 // #################################
 // ### Dashboard Page
@@ -10,17 +11,21 @@ import Link from "next/link";
 
 export default async function Dashboard() {
   const session = await auth();
+
+  if (!session) {
+    redirect("/login");
+  }
   const languages = await prisma.language.findMany();
   const difficulties = Object.values(Difficulty);
 
   const passedExercises = await prisma.exerciseAttempt.findMany({
-    where: { userId: session?.user?.id, status: "PASSED" },
+    where: { userId: session?.user?.id, status: AttemptStatus.PASSED },
     include: { exercise: { include: { language: true } } },
     orderBy: { createdAt: "desc" },
   });
 
   const inProgressExercises = await prisma.exerciseAttempt.findMany({
-    where: { userId: session?.user?.id, status: "PENDING" },
+    where: { userId: session?.user?.id, status: AttemptStatus.PENDING },
     include: { exercise: { include: { language: true } } },
     orderBy: { createdAt: "desc" },
   });
@@ -55,8 +60,7 @@ export default async function Dashboard() {
           <div className="lg:col-span-8 space-y-12">
             <div>
               <h3 className="text-xs font-black uppercase tracking-[0.4em] text-purple-300/40 mb-6 flex items-center gap-4">
-                Fragments en attente{" "}
-                <div className="h-px grow bg-white/5" />
+                Fragments en attente <div className="h-px grow bg-white/5" />
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {inProgressExercises.map((p) => (
@@ -89,8 +93,7 @@ export default async function Dashboard() {
 
             <div>
               <h3 className="text-xs font-black uppercase tracking-[0.4em] text-purple-300/40 mb-6 flex items-center gap-4">
-                Archives Cristallines{" "}
-                <div className="h-px grow bg-white/5" />
+                Archives Cristallines <div className="h-px grow bg-white/5" />
               </h3>
               <div className="space-y-4">
                 {passedExercises.map((p) => (

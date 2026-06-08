@@ -1,5 +1,7 @@
 import prisma from "@/lib/prisma";
 import TechWatchList from "@/components/TechWatchList";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 // #################################
 // ### Techwatch Page
@@ -10,6 +12,12 @@ export default async function TechWatchPage({
 }: Readonly<{
   searchParams: Promise<{ tag?: string }>;
 }>) {
+  const session = await auth();
+
+  if (!session) {
+    redirect("/login");
+  }
+
   const { tag } = await searchParams;
   const currentTag = tag || "javascript";
   const res = await fetch(

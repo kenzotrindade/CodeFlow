@@ -42,7 +42,7 @@ export default function AccountForm({ user }: Readonly<AccountFormProps>) {
     try {
       await updateAccount({ name, email, password });
       setMessage({ type: "success", text: "Fragment mis à jour avec succès." });
-    } catch (err) {
+    } catch (error) {
       setMessage({ type: "error", text: "Échec de la mise à jour." });
     } finally {
       setIsPending(false);
