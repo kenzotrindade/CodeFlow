@@ -5,7 +5,11 @@ import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
-import { REGEX, VALIDATION_MESSAGE } from "@/lib/types";
+import { REGEX, VALIDATION_MESSAGE, UpdatePayload } from "@/lib/types";
+
+// #################################
+// ### User Update Data
+// #################################
 
 export async function updateAccount(formData: {
   name: string;
@@ -19,7 +23,7 @@ export async function updateAccount(formData: {
   }
 
   try {
-    const updateData: any = {
+    const updateData: UpdatePayload = {
       name: formData.name,
       email: formData.email,
     };

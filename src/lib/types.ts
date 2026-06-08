@@ -21,6 +21,24 @@ export type LevelGuideLine = {
   general: LevelRule;
 };
 
+export type UpdatePayload = {
+  name?: string;
+  email?: string;
+  password?: string;
+};
+
+export type Article = {
+  title: string;
+  description: string;
+  url: string;
+};
+
+export type Language = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
 export const VALIDATION_MESSAGE = {
   PASSWORD:
     "Password must be at least 12 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.",

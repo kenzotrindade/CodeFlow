@@ -6,6 +6,10 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { promptForm } from "@/lib/types";
 
+// #################################
+// ### Dashboard Form
+// #################################
+
 export default function DashboardForms({
   languages,
   difficulties,
@@ -44,7 +48,9 @@ export default function DashboardForms({
     <div className="flex flex-col gap-8">
       <div className="space-y-4">
         <div className="space-y-2">
-          <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">Langage</label>
+          <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">
+            Langage
+          </label>
           <select
             value={selectedLangId}
             onChange={(e) => setSelectedLangId(e.target.value)}
@@ -59,7 +65,9 @@ export default function DashboardForms({
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">Difficulté</label>
+          <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">
+            Difficulté
+          </label>
           <select
             value={selectedDiff}
             onChange={(e) => setSelectedDiff(e.target.value)}
@@ -85,9 +93,12 @@ export default function DashboardForms({
       {showProjectModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
           <div className="card-fragment max-w-sm w-full border-pink-500 border-2 text-center">
-            <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-4">Bravo !</h2>
+            <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-4">
+              Bravo !
+            </h2>
             <p className="text-purple-200/60 text-sm mb-8 leading-relaxed">
-              Vous avez complété ce module de niveau <span className="text-pink-500 font-bold">{selectedDiff}</span>. 
+              Vous avez complété ce module de niveau{" "}
+              <span className="text-pink-500 font-bold">{selectedDiff}</span>.
               Un projet final vous attend.
             </p>
             <div className="flex flex-col gap-4">

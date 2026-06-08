@@ -5,6 +5,10 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
+// #################################
+// ### Login Page
+// #################################
+
 function LoginContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,7 +60,10 @@ function LoginContent() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <div className="space-y-1">
-            <label htmlFor="email" className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">
+            <label
+              htmlFor="email"
+              className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50"
+            >
               Identifiant Email
             </label>
             <input
@@ -72,7 +79,10 @@ function LoginContent() {
           </div>
 
           <div className="space-y-1">
-            <label htmlFor="password" className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50">
+            <label
+              htmlFor="password"
+              className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50"
+            >
               Clef d&apos;accès
             </label>
             <input

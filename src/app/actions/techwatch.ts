@@ -5,6 +5,10 @@ import prisma from "@/lib/prisma";
 import { prompts } from "@/lib/prompts/prompts";
 import { auth } from "@/lib/auth";
 
+// #################################
+// ### Techwatch Loading
+// #################################
+
 const client = new OpenAI({
   baseURL: "https://api.groq.com/openai/v1",
   apiKey: process.env.GROQ_API_KEY as string,
@@ -45,7 +49,13 @@ export async function TechwatchPrompt(data: {
       response_format: { type: "json_object" },
     });
 
-    const exerciseData = JSON.parse(completion.choices[0].message.content!);
+    const content = completion.choices[0].message.content;
+
+    if (!content) {
+      return;
+    }
+
+    const exerciseData = JSON.parse(content);
 
     const newExercise = await prisma.exercise.create({
       data: {
@@ -57,13 +67,15 @@ export async function TechwatchPrompt(data: {
         languageId: data.languageId,
         creatorId: session?.user?.id || null,
         attempts: {
-          create: session?.user?.id ? [
-            {
-              userId: session.user.id,
-              status: "PENDING",
-            }
-          ] : []
-        }
+          create: session?.user?.id
+            ? [
+                {
+                  userId: session.user.id,
+                  status: "PENDING",
+                },
+              ]
+            : [],
+        },
       },
     });
 

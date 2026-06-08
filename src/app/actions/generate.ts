@@ -5,7 +5,11 @@ import prisma from "@/lib/prisma";
 import { Language, Difficulty } from "@prisma/client";
 import { prompts } from "@/lib/prompts/prompts";
 import { auth } from "@/lib/auth";
-import { promptForm, LevelRule, LevelGuideLine } from "@/lib/types";
+import { promptForm, LevelGuideLine } from "@/lib/types";
+
+// #################################
+// ### Exercise Generation
+// #################################
 
 const client = new OpenAI({
   baseURL: "https://api.groq.com/openai/v1",
@@ -44,11 +48,11 @@ export async function GeneratePrompt({
   const historyText =
     history.length > 0 ? history : "Premier exercice, pas d'historique."; // Récupération de l'historique de l'utilisateur uniquement
 
-  const levelGuidelines = prompts.exercise_generation.level_guidelines as LevelGuideLine;
+  const levelGuidelines = prompts.exercise_generation
+    .level_guidelines as LevelGuideLine;
   const langKey = language.name.toLowerCase();
   const langRules = levelGuidelines[langKey] || levelGuidelines.general;
-  const specificRule =
-    langRules[difficulty as keyof typeof langRules] || langRules["EASY"];
+  const specificRule = langRules[difficulty] || langRules["EASY"];
 
   const isCapstone = promptArgs === promptForm.capstone;
   const template = isCapstone

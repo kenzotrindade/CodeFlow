@@ -1,11 +1,15 @@
 import prisma from "@/lib/prisma";
 import TechWatchList from "@/components/TechWatchList";
 
+// #################################
+// ### Techwatch Page
+// #################################
+
 export default async function TechWatchPage({
   searchParams,
-}: {
+}: Readonly<{
   searchParams: Promise<{ tag?: string }>;
-}) {
+}>) {
   const { tag } = await searchParams;
   const currentTag = tag || "javascript";
   const res = await fetch(

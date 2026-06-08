@@ -4,6 +4,10 @@ import DashboardForms from "@/components/DashboardForms";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
 
+// #################################
+// ### Dashboard Page
+// #################################
+
 export default async function Dashboard() {
   const session = await auth();
   const languages = await prisma.language.findMany();
@@ -52,7 +56,7 @@ export default async function Dashboard() {
             <div>
               <h3 className="text-xs font-black uppercase tracking-[0.4em] text-purple-300/40 mb-6 flex items-center gap-4">
                 Fragments en attente{" "}
-                <div className="h-[1px] flex-grow bg-white/5" />
+                <div className="h-px grow bg-white/5" />
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {inProgressExercises.map((p) => (
@@ -69,7 +73,7 @@ export default async function Dashboard() {
                       <h4 className="text-lg font-bold uppercase tracking-tighter group-hover:text-pink-400 transition-colors">
                         {p.exercise.title}
                       </h4>
-                      <div className="mt-4 flex items-center gap-2 text-[10px] text-pink-500 font-bold opacity-0 group-hover:opacity-100 transition-all translate-x-[-10px] group-hover:translate-x-0">
+                      <div className="mt-4 flex items-center gap-2 text-[10px] text-pink-500 font-bold opacity-0 group-hover:opacity-100 transition-all -translate-x-2.5 group-hover:translate-x-0">
                         REPRENDRE LE FLUX →
                       </div>
                     </div>
@@ -86,13 +90,13 @@ export default async function Dashboard() {
             <div>
               <h3 className="text-xs font-black uppercase tracking-[0.4em] text-purple-300/40 mb-6 flex items-center gap-4">
                 Archives Cristallines{" "}
-                <div className="h-[1px] flex-grow bg-white/5" />
+                <div className="h-px grow bg-white/5" />
               </h3>
               <div className="space-y-4">
                 {passedExercises.map((p) => (
                   <div
                     key={p.id}
-                    className="flex items-center justify-between p-6 bg-white/[0.02] border border-white/5 hover:border-pink-500/30 transition-all"
+                    className="flex items-center justify-between p-6 bg-white/2 border border-white/5 hover:border-pink-500/30 transition-all"
                   >
                     <div>
                       <h4 className="font-bold uppercase tracking-tight text-purple-100/80">

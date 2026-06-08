@@ -3,6 +3,10 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { completeExercise } from "@/app/actions/exercise";
 
+// #################################
+// ### Exercise Page
+// #################################
+
 export default async function ExercisePage({
   params,
 }: Readonly<{

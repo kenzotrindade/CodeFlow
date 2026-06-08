@@ -3,16 +3,21 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { TechwatchPrompt } from "@/app/actions/techwatch";
+import { Article, Language } from "@/lib/types";
+
+// #################################
+// ### Techwatch List Component
+// #################################
 
 export default function TechWatchList({
   articles,
   languages,
   currentTag,
-}: {
-  articles: any[];
-  languages: any[];
+}: Readonly<{
+  articles: Article[];
+  languages: Language[];
   currentTag: string;
-}) {
+}>) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const currentLang =
@@ -28,7 +33,7 @@ export default function TechWatchList({
     }
   };
 
-  const handleGenerate = (art: any, index: number) => {
+  const handleGenerate = (art: Article, index: number) => {
     setLoadingId(index);
     startTransition(async () => {
       const lang = languages.find((l) => l.id === selectedLangId);

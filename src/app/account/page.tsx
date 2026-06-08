@@ -3,6 +3,10 @@ import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import AccountForm from "@/components/AccountForm";
 
+// #################################
+// ### Account Page
+// #################################
+
 export default async function AccountPage() {
   const session = await auth();
 

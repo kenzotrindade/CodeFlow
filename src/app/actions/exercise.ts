@@ -6,6 +6,10 @@ import { AttemptStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+// #################################
+// ### Exercise completion
+// #################################
+
 export async function completeExercise(exerciseId: string) {
   const session = await auth();
 
