@@ -79,7 +79,7 @@ export default function TechWatchList({
         {articles.map((art, index) => (
           <div
             key={index}
-            className="card-fragment group flex flex-col justify-between hover:bg-white/[0.04] transition-all"
+            className="card-fragment group flex flex-col justify-between hover:bg-white/4 transition-all"
           >
             <div>
               <div className="mb-6 flex items-center gap-2">

@@ -35,6 +35,10 @@ export default function DashboardForms({
         promptArgs: promptForm.progressive,
       });
 
+      if (!exercise) {
+        return;
+      }
+
       if (exercise.isCapstone) {
         setLastGeneratedId(exercise.id);
         setShowProjectModal(true);
@@ -91,7 +95,7 @@ export default function DashboardForms({
       </button>
 
       {showProjectModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
           <div className="card-fragment max-w-sm w-full border-pink-500 border-2 text-center">
             <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-4">
               Bravo !

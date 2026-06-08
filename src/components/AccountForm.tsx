@@ -92,7 +92,7 @@ export default function AccountForm({ user }: Readonly<AccountFormProps>) {
 
       <div className="space-y-4">
         <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50 block">
-          Nouvelle clef d'accès (optionnel)
+          Nouvelle clef d&apos;accès (optionnel)
         </label>
         <input
           type="password"
@@ -123,7 +123,7 @@ export default function AccountForm({ user }: Readonly<AccountFormProps>) {
       <div className="pt-6 border-t border-white/5 flex justify-end">
         <button
           type="submit"
-          className="btn-prism min-w-[200px]"
+          className="btn-prism min-w-50"
           disabled={isPending}
         >
           {isPending ? "SYNCHRONISATION..." : "ENREGISTRER"}

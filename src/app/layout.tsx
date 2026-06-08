@@ -16,8 +16,8 @@ export default function RootLayout({
       <body className="relative">
         <SessionProviderWrapper>
           <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-            <div className="prisma-shape w-[500px] h-[500px] top-[-10%] right-[-5%] rotate-12 opacity-30" />
-            <div className="prisma-shape w-[600px] h-[600px] bottom-[-10%] left-[-10%] -rotate-12 opacity-20" />
+            <div className="prisma-shape w-125 h-125 top-[-10%] right-[-5%] rotate-12 opacity-30" />
+            <div className="prisma-shape w-150 h-150 bottom-[-10%] left-[-10%] -rotate-12 opacity-20" />
 
             <svg
               className="absolute inset-0 w-full h-full opacity-[0.03]"
