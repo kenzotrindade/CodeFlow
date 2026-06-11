@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 // #################################
-// ### Login Page
+// ### Login Content
 // #################################
 
 function LoginContent() {
@@ -41,19 +41,19 @@ function LoginContent() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] px-6">
-      <div className="card-fragment w-full max-w-md">
-        <h1 className="text-4xl font-black italic mb-8 tracking-tighter uppercase">
+      <section className="card-fragment w-full max-w-md border-white/10" aria-labelledby="login-title">
+        <h1 id="login-title" className="text-4xl font-black italic mb-8 tracking-tighter uppercase text-white">
           CONNEXION
         </h1>
 
         {isRegistered && !error && (
-          <div className="mb-6 p-4 bg-green-500/10 border-l-4 border-green-500 text-green-200 text-xs font-bold uppercase tracking-widest">
+          <div role="alert" className="mb-6 p-4 bg-green-500/10 border-l-4 border-green-500 text-green-100 text-xs font-bold uppercase tracking-widest">
             Compte créé. Identifiez-vous.
           </div>
         )}
 
         {error && (
-          <div className="mb-6 p-4 bg-red-500/10 border-l-4 border-red-500 text-red-200 text-xs font-bold uppercase tracking-widest">
+          <div role="alert" className="mb-6 p-4 bg-red-500/10 border-l-4 border-red-500 text-red-100 text-xs font-bold uppercase tracking-widest">
             {error}
           </div>
         )}
@@ -62,7 +62,7 @@ function LoginContent() {
           <div className="space-y-1">
             <label
               htmlFor="email"
-              className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50"
+              className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-100/60"
             >
               Identifiant Email
             </label>
@@ -70,18 +70,19 @@ function LoginContent() {
               id="email"
               type="email"
               placeholder="votre@email.com"
-              className="input-prism"
+              className="input-prism text-white"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={loading}
+              autoComplete="email"
             />
           </div>
 
           <div className="space-y-1">
             <label
               htmlFor="password"
-              className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50"
+              className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-100/60"
             >
               Clef d&apos;accès
             </label>
@@ -89,11 +90,12 @@ function LoginContent() {
               id="password"
               type="password"
               placeholder="••••••••"
-              className="input-prism"
+              className="input-prism text-white"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               disabled={loading}
+              autoComplete="current-password"
             />
           </div>
 
@@ -106,23 +108,23 @@ function LoginContent() {
           </button>
         </form>
 
-        <div className="mt-12 flex flex-col gap-6 items-center">
+        <footer className="mt-12 flex flex-col gap-6 items-center">
           <button
             onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
-            className="text-[10px] uppercase tracking-[0.2em] font-bold hover:text-pink-500 transition-colors border-b border-white/10 pb-1"
+            className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/60 hover:text-pink-500 transition-colors border-b border-white/20 pb-1"
             disabled={loading}
           >
             Continuer avec GitHub
           </button>
 
-          <p className="text-xs text-purple-200/40 font-medium italic">
+          <p className="text-xs text-purple-100/50 font-medium italic">
             Nouveau ici ?{" "}
             <Link href="/register" className="text-pink-500 hover:underline">
               Créez votre fragment
             </Link>
           </p>
-        </div>
-      </div>
+        </footer>
+      </section>
     </div>
   );
 }
@@ -131,8 +133,8 @@ export default function Login() {
   return (
     <Suspense
       fallback={
-        <div className="text-white font-black italic animate-pulse p-20">
-          CHARGEMENT...
+        <div className="text-white font-black italic animate-pulse p-20 text-center" role="status">
+          CHARGEMENT DU CENTRE D'ACCÈS...
         </div>
       }
     >
