@@ -7,7 +7,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prompts } from "@/lib/prompts/prompts";
 import { client } from "@/lib/openai";
-import { fillTemplate } from "@/lib/utils";
+import { fillTemplate, parseAIResponse } from "@/lib/utils";
+import { AIValidationResponse } from "@/lib/types";
 
 // #################################
 // ### Exercise actions
@@ -15,12 +16,15 @@ import { fillTemplate } from "@/lib/utils";
 
 export async function completeExercise(exerciseId: string) {
   const session = await auth();
-  if (!session?.user?.id) throw new Error("Non connecté");
+
+  if (!session?.user?.id) {
+    throw new Error("Non autorisé");
+  }
 
   await prisma.exerciseAttempt.updateMany({
     where: {
       userId: session.user.id,
-      exerciseId,
+      exerciseId: exerciseId,
       status: AttemptStatus.PENDING,
     },
     data: { status: AttemptStatus.PASSED },
@@ -33,14 +37,19 @@ export async function completeExercise(exerciseId: string) {
 
 export async function validateCode(exerciseId: string, submittedCode: string) {
   const session = await auth();
-  if (!session?.user?.id) return { error: "Non connecté" };
+
+  if (!session?.user?.id) {
+    return { error: "Session expirée" };
+  }
 
   const exercise = await prisma.exercise.findUnique({
     where: { id: exerciseId },
     include: { language: true },
   });
 
-  if (!exercise) return { error: "Défi introuvable" };
+  if (!exercise) {
+    return { error: "Exercise non trouvé !" };
+  }
 
   const finalPrompt = fillTemplate(prompts.exercise_validation.template, {
     title: exercise.title,
@@ -58,18 +67,23 @@ export async function validateCode(exerciseId: string, submittedCode: string) {
     });
 
     const content = completion.choices[0].message.content;
-    if (!content) return { error: "L'IA n'a pas répondu" };
 
-    const result = JSON.parse(content);
-    let score = Math.min(
-      Number(result.score) * (Number(result.score) <= 10 ? 10 : 1),
-      100,
-    );
+    if (!content) {
+      return { error: "Lumina doit être en pause café..." };
+    }
+
+    const result = parseAIResponse<AIValidationResponse>(content);
+
+    if (!result) {
+      return { error: "Lumina n'arrive pas à crée un audit !" };
+    }
+
+    const score = Number(result.score);
 
     await prisma.exerciseAttempt.updateMany({
       where: {
         userId: session.user.id,
-        exerciseId,
+        exerciseId: exerciseId,
         status: AttemptStatus.PENDING,
       },
       data: { submittedCode },
@@ -82,6 +96,7 @@ export async function validateCode(exerciseId: string, submittedCode: string) {
       learningPath: result.learning_path || [],
     };
   } catch (error) {
-    return { error: "Erreur de validation" };
+    console.error("Erreur de validation :", error);
+    return { error: "Échec de la communication OpenAI" };
   }
 }
