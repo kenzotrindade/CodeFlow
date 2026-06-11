@@ -2,10 +2,17 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import AccountForm from "@/components/AccountForm";
+import { User } from "lucide-react";
+import type { Metadata } from "next";
 
 // #################################
-// ### Account Page
+// ### Account Page SEO
 // #################################
+
+export const metadata: Metadata = {
+  title: "Profil | CodeFlow",
+  description: "Gérez vos paramètres utilisateur, mettez à jour vos identifiants et personnalisez votre expérience CodeFlow.",
+};
 
 export default async function AccountPage() {
   const session = await auth();
@@ -24,20 +31,23 @@ export default async function AccountPage() {
   }
 
   return (
-    <div className="container mx-auto px-6 max-w-4xl">
-      <div className="mb-20 text-center">
-        <h1 className="text-6xl font-black italic tracking-tighter mix-diff uppercase mb-2">
-          VOTRE PROFIL
-        </h1>
-        <div className="h-1 w-24 bg-pink-500 mx-auto mb-6" />
-        <p className="text-purple-200/50 font-mono text-sm tracking-widest uppercase">
-          Paramètres du fragment utilisateur
-        </p>
-      </div>
+    <div className="container mx-auto px-6 max-w-[1900px] pt-12 pb-20">
+      <header className="mb-16 border-b border-white/10 pb-12">
+        <div className="space-y-4">
+          <h1 className="text-6xl font-black italic tracking-tighter mix-diff uppercase mb-2">
+            VOTRE PROFIL
+          </h1>
+          <div className="h-1.5 w-32 bg-pink-500 mb-6" aria-hidden="true" />
+          <p className="text-[12px] text-purple-100/80 font-mono tracking-[0.4em] uppercase flex items-center gap-3">
+            <User className="w-4 h-4 text-pink-500" aria-hidden="true" />
+            Paramètres du fragment utilisateur
+          </p>
+        </div>
+      </header>
 
-      <div className="card-fragment">
+      <section className="card-fragment p-8 lg:p-12 border-white/10 max-w-5xl mx-auto" aria-label="Formulaire de modification de profil">
         <AccountForm user={user} />
-      </div>
+      </section>
     </div>
   );
 }

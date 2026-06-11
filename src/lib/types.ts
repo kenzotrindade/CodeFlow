@@ -1,3 +1,7 @@
+// #################################
+// ### Shared Types
+// #################################
+
 export enum promptForm {
   progressive = "progressive",
   capstone = "capstone",
@@ -31,6 +35,15 @@ export type Article = {
   title: string;
   description: string;
   url: string;
+  cover_image?: string;
+  social_image?: string;
+  tags?: string;
+  reading_time_minutes?: number;
+  published_at?: string;
+  user?: {
+    name: string;
+    profile_image_90: string;
+  };
 };
 
 export type Language = {

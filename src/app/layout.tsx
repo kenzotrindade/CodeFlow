@@ -1,6 +1,7 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
+import { Toaster } from "sonner";
 
 // #################################
 // ### Global Layout
@@ -47,6 +48,7 @@ export default function RootLayout({
 
           <Navbar />
           <main className="relative z-10 pt-24 pb-12">{children}</main>
+          <Toaster richColors position="bottom-right" theme="dark" />
         </SessionProviderWrapper>
       </body>
     </html>

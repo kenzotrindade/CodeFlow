@@ -17,29 +17,22 @@ export async function updateAccount(formData: {
   password: string;
 }) {
   const session = await auth();
-
-  if (!session?.user?.id) {
-    redirect("/login");
-  }
+  if (!session?.user?.id) redirect("/login");
 
   try {
+    if (!REGEX.USERNAME.test(formData.name))
+      return { error: VALIDATION_MESSAGE.USERNAME };
+    if (!REGEX.EMAIL.test(formData.email))
+      return { error: VALIDATION_MESSAGE.EMAIL };
+
     const updateData: UpdatePayload = {
       name: formData.name,
       email: formData.email,
     };
 
-    if (!REGEX.USERNAME.test(formData.name)) {
-      return { error: VALIDATION_MESSAGE.USERNAME };
-    }
-
-    if (!REGEX.EMAIL.test(formData.email)) {
-      return { error: VALIDATION_MESSAGE.EMAIL };
-    }
-
-    if (formData.password && formData.password.trim() !== "") {
-      if (!REGEX.PASSWORD.test(formData.password)) {
+    if (formData.password?.trim()) {
+      if (!REGEX.PASSWORD.test(formData.password))
         return { error: VALIDATION_MESSAGE.PASSWORD };
-      }
       updateData.password = await bcrypt.hash(formData.password, 10);
     }
 
@@ -47,11 +40,10 @@ export async function updateAccount(formData: {
       where: { id: session.user.id },
       data: updateData,
     });
+
     revalidatePath("/account");
-    revalidatePath("/dashboard");
     return { success: true };
   } catch (error) {
-    console.error(error);
-    return { error: "Update Unvailabled" };
+    return { error: "Erreur lors de la mise à jour" };
   }
 }

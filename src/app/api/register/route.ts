@@ -11,59 +11,41 @@ export async function POST(req: Request) {
   try {
     const { email, password, name } = await req.json();
 
-    if (!email || !password) {
-      return NextResponse.json({ error: "Missing fields" }, { status: 401 });
+    if (!email || !password || !name) {
+      return NextResponse.json({ error: "Champs manquants" }, { status: 400 });
     }
 
-    if (!REGEX.USERNAME.test(name)) {
+    if (!REGEX.USERNAME.test(name))
       return NextResponse.json(
         { error: VALIDATION_MESSAGE.USERNAME },
         { status: 400 },
       );
-    }
-
-    if (!REGEX.EMAIL.test(email)) {
+    if (!REGEX.EMAIL.test(email))
       return NextResponse.json(
         { error: VALIDATION_MESSAGE.EMAIL },
         { status: 400 },
       );
-    }
-
-    if (!REGEX.PASSWORD.test(password)) {
+    if (!REGEX.PASSWORD.test(password))
       return NextResponse.json(
         { error: VALIDATION_MESSAGE.PASSWORD },
         { status: 400 },
       );
-    }
 
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (existingUser) {
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser)
       return NextResponse.json(
-        { error: "User already exists" },
-        { status: 402 },
+        { error: "Cet email est déjà utilisé" },
+        { status: 400 },
       );
-    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
-      data: {
-        email,
-        name,
-        password: hashedPassword,
-      },
+    await prisma.user.create({
+      data: { email, name, password: hashedPassword },
     });
 
-    return NextResponse.json({
-      id: user.id,
-      email: user.email,
-      name: user.name,
-    });
+    return NextResponse.json({ message: "Inscription réussie" });
   } catch (error) {
-    console.log("Internal error : ", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return NextResponse.json({ error: "Erreur interne" }, { status: 500 });
   }
 }

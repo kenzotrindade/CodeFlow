@@ -1,3 +1,7 @@
+// #################################
+// ### AI Prompts
+// #################################
+
 export const prompts = {
   exercise_generation: {
     system_persona: `Tu es LUMINA, une entité mentor cybernétique spécialisée dans l'ingénierie logicielle d'élite.
@@ -104,5 +108,46 @@ export const prompts = {
       "expectedOutput": "...",
       "notion": "..."
     }`,
+  },
+
+  exercise_validation: {
+    template: `
+    ### PROTOCOLE DE VALIDATION LUMINA
+    Défi : {{title}}
+    Énoncé : {{statement}}
+    Attendu : {{expectedOutput}}
+    Langage : {{language}}
+
+    Code soumis par l'élève :
+    \`\`\`{{language}}
+    {{submitted_code}}
+    \`\`\`
+
+    ### MISSION DE LUMINA
+    Tu es un auditeur de sécurité senior. Analyse le code soumis avec une rigueur mathématique.
+    1. Toute critique doit être étayée par une preuve logique (ex: "La ligne X peut causer un crash si...").
+    2. Ne donne pas de feedback générique ("peut être amélioré"). Sois chirurgical.
+    3. Si le code est parfait, admets-le et donne 100.
+
+    ### GRILLE DE NOTATION (STRICTE)
+    - Fonctionnalités (40 pts) : Créer, Modifier, Supprimer, Journalisation. (-10 par manque)
+    - Sécurité (30 pts) : Permissions, Robustesse aux inputs, Exceptions, Thread-safety.
+    - Architecture (20 pts) : Idiomes modernes (RAII, Smart Pointers), O-notation, Lisibilité.
+    - Logging (10 pts) : Traçabilité complète des succès et échecs.
+
+    ### FORMAT DE RÉPONSE (JSON)
+    {
+      "passed": boolean,
+      "score": number,
+      "critiques_techniques": [
+        "Liste des failles réelles avec preuve par le code"
+      ],
+      "learning_path": [
+        { "title": "Nom de la ressource/notion", "url": "Lien optionnel", "description": "Pourquoi étudier ça ?" }
+      ],
+      "points_forts": ["..."],
+      "feedback": "Message de Lumina global (concis et incisif)."
+    }
+    IMPORTANT: Si le score est < 100, le 'learning_path' doit être très précis (ex: 'Header <mutex> en C++', 'Pattern RAII', 'MDN: Promise.allSettled').`,
   },
 };

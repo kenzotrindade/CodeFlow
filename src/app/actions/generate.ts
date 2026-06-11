@@ -1,20 +1,16 @@
 "use server";
 
-import OpenAI from "openai";
 import prisma from "@/lib/prisma";
 import { Language, Difficulty } from "@prisma/client";
 import { prompts } from "@/lib/prompts/prompts";
 import { auth } from "@/lib/auth";
 import { promptForm, LevelGuideLine } from "@/lib/types";
+import { client } from "@/lib/openai";
+import { fillTemplate } from "@/lib/utils";
 
 // #################################
 // ### Exercise Generation
 // #################################
-
-const client = new OpenAI({
-  baseURL: "https://api.groq.com/openai/v1",
-  apiKey: process.env.GROQ_API_KEY as string,
-});
 
 export async function GeneratePrompt({
   language,
@@ -37,19 +33,14 @@ export async function GeneratePrompt({
     },
     orderBy: { createdAt: "desc" },
     take: 20,
-  }); // Récupération des exercises fait ET non fait
+  });
 
   const history = exercises
-    .map((e) => {
-      const status = e.attempts[0]?.status || "Not try";
-      return `- ${e.title} (${e.difficulty}, Statut: ${status})`;
-    })
-    .join("\n"); // Join pour faire un saut de ligne à toutes les lignes car si c'est dans le return ce sera tout sauf la dernière
-
-  const historyText =
-    history.length > 0
-      ? history
-      : "L'utilisateur n'a pas d'historique dans ce langage et cette difficulté."; // Récupération de l'historique de l'utilisateur uniquement
+    .map(
+      (e) =>
+        `- ${e.title} (${e.difficulty}, Statut: ${e.attempts[0]?.status || "Not try"})`,
+    )
+    .join("\n");
 
   const levelGuidelines = prompts.exercise_generation
     .level_guidelines as LevelGuideLine;
@@ -62,74 +53,50 @@ export async function GeneratePrompt({
     ? prompts.exercise_generation.capstone_template
     : prompts.exercise_generation.progressive_template;
 
-  if (!template) {
-    throw new Error(
-      `Template non trouvé pour le mode: ${isCapstone ? "Capstone" : "Progressive"}`,
-    );
-  }
-
-  const finalPrompt = template
-    .replaceAll(
-      "{{system_persona}}",
-      prompts.exercise_generation.system_persona,
-    )
-    .replaceAll("{{language}}", language.name)
-    .replaceAll("{{difficulty}}", difficulty)
-    .replaceAll("{{level_rules}}", specificRule)
-    .replaceAll("{{last_exercises}}", historyText);
+  const finalPrompt = fillTemplate(template, {
+    system_persona: prompts.exercise_generation.system_persona,
+    language: language.name,
+    difficulty: difficulty,
+    level_rules: specificRule,
+    last_exercises: history || "Aucun historique.",
+  });
 
   try {
     const completion = await client.chat.completions.create({
       model: "llama-3.3-70b-versatile",
-      messages: [
-        {
-          role: "user",
-          content: finalPrompt,
-        },
-      ],
+      messages: [{ role: "user", content: finalPrompt }],
       response_format: { type: "json_object" },
     });
 
-    if (!completion.choices[0].message.content) {
-      return;
-    }
+    const content = completion.choices[0].message.content;
+    if (!content) return;
 
-    const data = JSON.parse(completion.choices[0].message.content);
+    const data = JSON.parse(content);
     const luminaHeader = data.lumina_message
       ? `### MESSAGE DE LUMINA\n${data.lumina_message}\n\n---\n\n`
       : "";
 
-    const formattedExpectedOutput =
-      typeof data.expectedOutput === "object"
-        ? JSON.stringify(data.expectedOutput, null, 2)
-        : data.expectedOutput;
-
-    const newExercise = await prisma.exercise.create({
+    return await prisma.exercise.create({
       data: {
         title: data.title,
         statement: `${luminaHeader}${data.statement}`,
-        expectedOutput: formattedExpectedOutput,
+        expectedOutput:
+          typeof data.expectedOutput === "object"
+            ? JSON.stringify(data.expectedOutput, null, 2)
+            : data.expectedOutput,
         notion: data.notion || (isCapstone ? "Projet de synthèse" : null),
         isCapstone: data.isCapstone || isCapstone || false,
-        difficulty: difficulty,
+        difficulty,
         languageId: language.id,
         creatorId: session?.user?.id || null,
         attempts: {
           create: session?.user?.id
-            ? [
-                {
-                  userId: session.user.id,
-                  status: "PENDING",
-                },
-              ]
+            ? [{ userId: session.user.id, status: "PENDING" }]
             : [],
         },
       },
     });
-
-    return newExercise;
-  } catch (error: unknown) {
-    console.error("Error generating exercise:", error);
-    throw new Error("Failed to generate exercise", { cause: error });
+  } catch (error) {
+    return null;
   }
 }
