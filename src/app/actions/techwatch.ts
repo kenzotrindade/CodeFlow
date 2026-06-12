@@ -24,6 +24,10 @@ export async function TechwatchPrompt({
 }) {
   const session = await auth();
 
+  if (!session?.user?.id) {
+    throw new Error("Non autorisé");
+  }
+
   const finalPrompt = fillTemplate(prompts.techwatch_generation.template, {
     article_title: title,
     article_description: description,
@@ -38,24 +42,37 @@ export async function TechwatchPrompt({
     });
 
     const content = completion.choices[0].message.content;
-    if (!content) return null;
+
+    if (!content) {
+      return null;
+    }
 
     const data = parseAIResponse<AIGenerationResponse>(content);
-    if (!data) return null;
 
-    const luminaHeader = data.lumina_message ? `### MESSAGE DU MENTOR\n${data.lumina_message}\n\n---\n\n` : "";
+    if (!data) {
+      return null;
+    }
+
+    const luminaHeader = data.lumina_message
+      ? `MESSAGE DE LUMINA : \n${data.lumina_message}\n\n---\n\n`
+      : "";
 
     return await prisma.exercise.create({
       data: {
         title: data.title,
         statement: `${luminaHeader}${data.statement}`,
-        expectedOutput: typeof data.expectedOutput === "object" ? JSON.stringify(data.expectedOutput, null, 2) : data.expectedOutput,
+        expectedOutput:
+          typeof data.expectedOutput === "object"
+            ? JSON.stringify(data.expectedOutput, null, 2)
+            : data.expectedOutput,
         notion: data.notion || "Veille technologique",
         difficulty: "MEDIUM",
         languageId,
         creatorId: session?.user?.id || null,
         attempts: {
-          create: session?.user?.id ? [{ userId: session.user.id, status: "PENDING" }] : [],
+          create: session?.user?.id
+            ? [{ userId: session.user.id, status: "PENDING" }]
+            : [],
         },
       },
     });
