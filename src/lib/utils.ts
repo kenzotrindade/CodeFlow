@@ -9,3 +9,16 @@ export function fillTemplate(template: string, values: Record<string, string>) {
   }
   return result;
 }
+
+export function parseAIResponse<T>(content: string): T | null {
+  try {
+    const cleaned = content
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+    return JSON.parse(cleaned) as T;
+  } catch (error) {
+    console.error("AI Parsing Error:", error);
+    return null;
+  }
+}

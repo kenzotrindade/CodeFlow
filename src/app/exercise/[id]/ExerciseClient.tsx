@@ -1,140 +1,176 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { completeExercise } from "@/app/actions/exercise";
 import LuminaChat from "@/components/LuminaChat";
 import CodeEditor from "@/components/CodeEditor";
+import { AIValidationResponse, Language } from "@/lib/types";
+import { Difficulty } from "@prisma/client";
 import {
-  ChevronLeft,
-  Info,
-  CheckCircle2,
   Award,
   XCircle,
   BrainCircuit,
-  BookOpen,
   ExternalLink,
   Library,
+  Terminal,
+  Activity,
+  CheckCircle,
+  Info,
 } from "lucide-react";
 
-export default function ExerciseClient({ exercise }: any) {
-  const [validationResult, setValidationResult] = useState<{
-    passed: boolean;
-    feedback: string;
-    score: number;
-    learningPath?: { title: string; url?: string; description: string }[];
-  } | null>(null);
+interface ExerciseClientProps {
+  exercise: {
+    id: string;
+    title: string;
+    statement: string;
+    difficulty: Difficulty;
+    language: Language;
+    codeSnippet?: string | null;
+  };
+}
+
+export default function ExerciseClient({
+  exercise,
+}: Readonly<ExerciseClientProps>) {
+  const [validationResult, setValidationResult] =
+    useState<AIValidationResponse | null>(null);
 
   const handleValidation = (result: any) => {
     setValidationResult(result);
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-12 flex flex-col">
-      <div className="container mx-auto px-6 max-w-7xl mb-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-white/5 pb-8">
-          <div>
-            <Link
-              href="/dashboard"
-              className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-white/30 hover:text-pink-500 transition-colors mb-4"
-            >
-              <ChevronLeft className="w-3 h-3" /> Retour Dashboard
-            </Link>
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-[10px] font-mono bg-pink-500/10 text-pink-500 px-2 py-0.5 border border-pink-500/20">
+    <div className="min-h-screen pt-32 pb-20 flex flex-col bg-[radial-gradient(circle_at_50%_0%,rgba(236,72,153,0.03)_0%,transparent_50%)]">
+      {/* Header Contextuel */}
+      <header className="container mx-auto px-6 max-w-[1900px] mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-10">
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 bg-pink-500/10 text-pink-500 px-3 py-1 border border-pink-500/20 rounded-full text-[10px] font-black uppercase tracking-widest">
+                <Terminal className="w-3 h-3" aria-hidden="true" />
                 {exercise.language.name}
-              </span>
-              <span className="text-[10px] font-mono text-purple-300/40 uppercase tracking-widest">
-                {exercise.difficulty}
-              </span>
+              </div>
+              <div className="text-[10px] font-mono text-white/30 uppercase tracking-[0.3em]">
+                Séquence: {exercise.difficulty}
+              </div>
             </div>
-            <h1 className="text-3xl md:text-4xl font-black italic tracking-tighter uppercase mix-diff">
+            <h1 className="text-4xl md:text-5xl font-black italic tracking-tighter uppercase text-white mix-diff">
               {exercise.title}
             </h1>
           </div>
 
           {validationResult && (
-            <div className="flex items-center gap-4 bg-white/5 border border-white/10 p-4 backdrop-blur-md animate-in fade-in zoom-in duration-500">
-              <div className="text-right">
-                <div className="text-[9px] uppercase tracking-widest text-purple-100/30 font-bold mb-1">
-                  Analyse Finale
+            <aside
+              className="flex items-center gap-6 bg-white/[0.02] border border-white/10 p-6 backdrop-blur-xl animate-in fade-in zoom-in duration-500 relative group"
+              aria-label="Résultat de l'audit"
+            >
+              <div
+                className="absolute inset-0 bg-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity"
+                aria-hidden="true"
+              />
+              <div className="text-right relative">
+                <div className="text-[9px] uppercase tracking-[0.3em] text-white/30 font-black mb-1">
+                  Audit d'Intégrité
                 </div>
                 <div
-                  className={`text-3xl font-black italic ${validationResult.passed ? "text-green-500" : "text-red-500"}`}
+                  className={`text-4xl font-black italic ${validationResult.passed ? "text-green-500" : "text-red-500"}`}
                 >
                   {validationResult.score}%
                 </div>
               </div>
               <div
-                className={`w-12 h-12 flex items-center justify-center border-2 ${validationResult.passed ? "border-green-500 bg-green-500/10" : "border-red-500 bg-red-500/10"}`}
+                className={`w-14 h-14 flex items-center justify-center border-2 relative ${validationResult.passed ? "border-green-500 bg-green-500/5" : "border-red-500 bg-red-500/5"}`}
               >
                 {validationResult.passed ? (
-                  <Award className="w-6 h-6 text-green-500" />
+                  <Award
+                    className="w-7 h-7 text-green-500"
+                    aria-label="Validé"
+                  />
                 ) : (
-                  <XCircle className="w-6 h-6 text-red-500" />
+                  <XCircle
+                    className="w-7 h-7 text-red-500"
+                    aria-label="Échec"
+                  />
                 )}
               </div>
-            </div>
+            </aside>
           )}
         </div>
-      </div>
+      </header>
 
-      <div className="container mx-auto px-6 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          <div className="lg:col-span-5 space-y-8">
-            <section className="space-y-6">
-              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-pink-500/60">
-                <BrainCircuit className="w-3 h-3" /> Énoncé du Fragment
+      <div className="container mx-auto px-6 max-w-[1900px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+          {/* Col Gauche : Mentor & Feedback */}
+          <section
+            className="lg:col-span-5 space-y-12"
+            aria-label="Énoncé et retours"
+          >
+            <article className="space-y-6">
+              <div className="flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.4em] text-white/20">
+                <BrainCircuit
+                  className="w-4 h-4 text-pink-500/60"
+                  aria-hidden="true"
+                />
+                Spécifications de la Mission
               </div>
               <LuminaChat statement={exercise.statement} />
-            </section>
+            </article>
 
             {validationResult && (
-              <div className="space-y-8 animate-in fade-in slide-in-from-left-4 duration-700">
-                <section>
-                  <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-purple-300/40 mb-4">
-                    Rapport de Lumina
+              <div className="space-y-12 animate-in fade-in slide-in-from-left-6 duration-700">
+                <section className="space-y-6">
+                  <div className="flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.4em] text-white/20">
+                    <Activity
+                      className="w-4 h-4 text-purple-500/60"
+                      aria-hidden="true"
+                    />
+                    Analyse de l'Architecte
                   </div>
                   <div
-                    className={`p-6 border-l-4 bg-white/[0.02] ${validationResult.passed ? "border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.05)]" : "border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.05)]"}`}
+                    className={`p-8 border-l-4 bg-white/[0.01] backdrop-blur-sm ${validationResult.passed ? "border-green-500" : "border-red-500"}`}
                   >
-                    <p className="text-sm text-purple-100/80 leading-relaxed font-mono italic">
-                      {validationResult.feedback}
+                    <p className="text-base text-purple-100/90 leading-relaxed font-mono italic">
+                      "{validationResult.feedback}"
                     </p>
                   </div>
                 </section>
 
-                {validationResult.learningPath &&
-                  validationResult.learningPath.length > 0 && (
-                    <section>
-                      <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-pink-500 mb-4">
-                        <Library className="w-3 h-3" /> Protocole de
-                        Perfectionnement
+                {validationResult.learning_path &&
+                  validationResult.learning_path.length > 0 && (
+                    <section className="space-y-6">
+                      <div className="flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.4em] text-pink-500/60">
+                        <Library className="w-4 h-4" aria-hidden="true" />
+                        Protocole d'Optimisation
                       </div>
-                      <div className="grid grid-cols-1 gap-3">
-                        {validationResult.learningPath.map((item, idx) => (
-                          <div
+                      <div className="grid grid-cols-1 gap-4">
+                        {validationResult.learning_path.map((item, idx) => (
+                          <article
                             key={idx}
-                            className="bg-white/[0.03] border border-white/5 p-4 hover:bg-white/[0.05] transition-colors group"
+                            className="bg-white/[0.02] border border-white/5 p-6 hover:bg-white/[0.04] transition-all group border-l border-l-transparent hover:border-l-pink-500"
                           >
-                            <div className="flex items-center justify-between mb-2">
-                              <h4 className="text-[11px] font-black uppercase tracking-widest text-white group-hover:text-pink-500 transition-colors">
+                            <div className="flex items-center justify-between mb-3">
+                              <h4 className="text-[12px] font-black uppercase tracking-widest text-white/80 group-hover:text-white transition-colors">
                                 {item.title}
                               </h4>
                               {item.url && (
                                 <a
                                   href={item.url}
                                   target="_blank"
-                                  className="text-purple-400 hover:text-white transition-colors"
+                                  rel="noopener noreferrer"
+                                  className="text-purple-400 hover:text-pink-500 transition-colors"
+                                  title="Ouvrir la ressource"
                                 >
-                                  <ExternalLink className="w-3 h-3" />
+                                  <ExternalLink
+                                    className="w-4 h-4"
+                                    aria-hidden="true"
+                                  />
                                 </a>
                               )}
                             </div>
-                            <p className="text-[10px] text-purple-100/40 leading-relaxed italic">
+                            <p className="text-[11px] text-purple-100/40 leading-relaxed italic">
                               {item.description}
                             </p>
-                          </div>
+                          </article>
                         ))}
                       </div>
                     </section>
@@ -142,18 +178,30 @@ export default function ExerciseClient({ exercise }: any) {
               </div>
             )}
 
-            <div className="bg-white/[0.02] border border-white/5 p-4 flex items-start gap-3">
-              <Info className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
-              <p className="text-[11px] text-purple-100/40 leading-relaxed italic">
-                La cristallisation n'est possible qu'après une validation
-                positive de l'entité Lumina.
-              </p>
-            </div>
-          </div>
+            {!validationResult && (
+              <div
+                className="bg-white/[0.01] border border-white/5 p-6 flex items-start gap-4 opacity-40"
+                role="status"
+              >
+                <Info
+                  className="w-5 h-5 text-purple-400 shrink-0 mt-0.5"
+                  aria-hidden="true"
+                />
+                <p className="text-xs text-purple-100/60 leading-relaxed italic uppercase tracking-wider">
+                  Soumettez votre implémentation pour déclencher l'audit de
+                  sécurité de votre mentor.
+                </p>
+              </div>
+            )}
+          </section>
 
-          <div className="lg:col-span-7 space-y-8">
-            <div className="sticky top-24 space-y-8">
-              <div className="h-[500px]">
+          {/* Col Droite : Éditeur & Validation */}
+          <section
+            className="lg:col-span-7 space-y-10"
+            aria-label="Zone d'implémentation"
+          >
+            <div className="sticky top-32 space-y-10">
+              <div className="h-[600px] shadow-2xl">
                 <CodeEditor
                   exerciseId={exercise.id}
                   language={exercise.language.name}
@@ -163,14 +211,14 @@ export default function ExerciseClient({ exercise }: any) {
               </div>
 
               <div
-                className={`card-fragment p-8 flex flex-col md:flex-row items-center justify-between gap-8 border-pink-500/20 bg-linear-to-r from-pink-500/5 to-transparent transition-all duration-700 ${!validationResult?.passed ? "opacity-30 grayscale pointer-events-none" : "opacity-100 shadow-[0_0_30px_rgba(236,72,153,0.1)]"}`}
+                className={`card-fragment p-10 flex flex-col md:flex-row items-center justify-between gap-10 border-white/5 bg-linear-to-r from-white/[0.02] to-transparent transition-all duration-1000 ${!validationResult?.passed ? "opacity-20 grayscale pointer-events-none scale-[0.98]" : "opacity-100 shadow-[0_20px_50px_rgba(236,72,153,0.1)] scale-100"}`}
               >
-                <div>
-                  <h3 className="text-white font-bold uppercase tracking-widest text-xs">
-                    Stabilisation du Fragment
+                <div className="space-y-2">
+                  <h3 className="text-white font-black uppercase tracking-[0.3em] text-sm">
+                    Validation du Flux
                   </h3>
-                  <p className="text-[10px] text-purple-100/30 font-mono mt-1">
-                    Prêt pour l'archivage dans le flux cristallin
+                  <p className="text-[10px] text-purple-100/30 font-mono uppercase tracking-widest">
+                    Signature d'intégrité prête pour archivage
                   </p>
                 </div>
 
@@ -178,14 +226,17 @@ export default function ExerciseClient({ exercise }: any) {
                   <button
                     type="submit"
                     disabled={!validationResult?.passed}
-                    className="btn-prism px-12 group flex items-center gap-3 disabled:opacity-50"
+                    className="btn-prism px-16 py-5 group flex items-center gap-4 disabled:opacity-50"
                   >
-                    <CheckCircle2 className="w-4 h-4" /> CRISTALLISER
+                    <CheckCircle className="w-5 h-5" aria-hidden="true" />
+                    <span className="text-[12px] tracking-[0.3em]">
+                      ARCHIVER
+                    </span>
                   </button>
                 </form>
               </div>
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </div>

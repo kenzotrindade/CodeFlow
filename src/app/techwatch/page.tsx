@@ -2,10 +2,16 @@ import prisma from "@/lib/prisma";
 import TechWatchList from "@/components/TechWatchList";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 
 // #################################
-// ### Techwatch Page
+// ### Techwatch Page SEO
 // #################################
+
+export const metadata: Metadata = {
+  title: "Veille Tech | CodeFlow",
+  description: "Flux de veille technologique en temps réel transformé en modules d'apprentissage pratiques.",
+};
 
 export default async function TechWatchPage({
   searchParams,
@@ -18,35 +24,20 @@ export default async function TechWatchPage({
   const { tag } = await searchParams;
   const currentTag = tag || "javascript";
 
-  const res = await fetch(
-    `https://dev.to/api/articles?tag=${currentTag}&per_page=12`,
-    {
-      next: { revalidate: 3600 },
-    },
-  );
+  const res = await fetch(`https://dev.to/api/articles?tag=${currentTag}&per_page=12`, {
+    next: { revalidate: 3600 },
+  });
 
   const articles = await res.json();
   const languages = await prisma.language.findMany();
 
   return (
-    <div className="container mx-auto px-6 max-w-7xl pt-8">
-      <div className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-        <div>
-          <h1 className="text-6xl font-black italic tracking-tighter mix-diff uppercase mb-2">
-            TECH WATCH
-          </h1>
-          <div className="h-1 w-24 bg-pink-500 mb-6" />
-          <p className="text-purple-200/50 font-mono text-sm tracking-widest uppercase">
-            Extraction de flux externes en temps réel
-          </p>
-        </div>
-      </div>
-
+    <main className="container mx-auto px-6 max-w-[1900px] pt-12">
       <TechWatchList
         articles={Array.isArray(articles) ? articles : []}
         languages={languages}
         currentTag={currentTag}
       />
-    </div>
+    </main>
   );
 }

@@ -26,7 +26,6 @@ const COLORS = ["#ec4899", "#a855f7", "#5b21b6", "#1e1b4b", "#4c1d95"];
 export default function ExerciseStats({ data }: StatsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {/* Total Card */}
       <div className="card-fragment flex flex-col justify-center items-center text-center p-6">
         <span className="text-4xl font-black text-white mb-1">
           {data.totalCompleted}
@@ -36,7 +35,6 @@ export default function ExerciseStats({ data }: StatsProps) {
         </span>
       </div>
 
-      {/* Success Rate Card */}
       <div className="card-fragment flex flex-col justify-center items-center text-center p-6">
         <span className="text-4xl font-black text-white mb-1">
           {data.successRate}%
@@ -46,9 +44,8 @@ export default function ExerciseStats({ data }: StatsProps) {
         </span>
       </div>
 
-      {/* Language Distribution */}
       <div className="card-fragment md:col-span-1 lg:col-span-2 p-6 min-h-[200px]">
-        <h3 className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50 mb-4">
+        <h3 className="text-[12px] xl:text-[14px] uppercase tracking-[0.2em] font-black text-purple-300/50 mb-4">
           Distribution des Langages
         </h3>
         <div className="h-[150px] w-full">
@@ -83,9 +80,8 @@ export default function ExerciseStats({ data }: StatsProps) {
         </div>
       </div>
 
-      {/* Activity Chart */}
       <div className="card-fragment md:col-span-2 lg:col-span-4 p-8">
-        <h3 className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50 mb-8">
+        <h3 className="text-[12px] xl:text-[14px] uppercase tracking-[0.2em] font-black text-purple-300/50 mb-8">
           Flux d'Activité Hebdomadaire
         </h3>
         <div className="h-[250px] w-full">

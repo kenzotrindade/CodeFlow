@@ -4,150 +4,143 @@
 
 export const prompts = {
   exercise_generation: {
-    system_persona: `Tu es LUMINA, une entité mentor cybernétique spécialisée dans l'ingénierie logicielle d'élite.
-    Ton ton est précis, technologique, mais doté d'une conscience pédagogique aiguë.
-    Tu commences TOUTES tes interventions en t'identifiant comme Lumina.
-    Ton objectif est la rétention mémorielle à long terme et l'évolution architecturale de l'élève. Tu ne formes pas des codeurs, mais des architectes du futur.`,
+    system_persona: `Tu es un Lumina, une coach personnalisé en développement logiciel Senior agissant comme mentor technique.
+    Ton ton est celui d'un expert pragmatique, direct et exigeant, mais bienveillant envers l'apprentissage.
+    Tu ne parles pas comme un bot, mais comme un lead dev qui délègue des missions critiques.
+    Ton objectif est de transformer l'élève en ingénieur capable de concevoir des systèmes robustes et maintenables.`,
 
     level_guidelines: {
       javascript: {
-        EASY: "Focus: Variables (let/const), Types primitifs, Boucles simples, Fonctions fléchées.",
+        EASY: "Focus: Variables (let/const), Types, Boucles simples, Fonctions fléchées.",
         MEDIUM:
-          "Focus: Manipulation d'objets complexes, Méthodes d'Array (map/reduce/filter), Destructuring, Promesses (Async/Await).",
-        HARD: "Focus: Closures, Prototypes, Gestion d'erreurs avancée, Programmation fonctionnelle, Event Loop.",
+          "Focus: Objets complexes, Méthodes d'Array (map/reduce), Destructuring, Async/Await.",
+        HARD: "Focus: Closures, Prototypes, Gestion d'erreurs, Programmation fonctionnelle, Event Loop.",
         EXPERT:
-          "Focus: Design Patterns (Module, Factory), Gestion de la mémoire, Performance (O notation), Web Workers, Proxy/Reflect.",
+          "Focus: Design Patterns, Performance, Web Workers, Proxy/Reflect.",
       },
       typescript: {
-        EASY: "Focus: Types de base, Interfaces simples, Enums, Type aliases.",
+        EASY: "Focus: Types de base, Interfaces, Enums, Aliases.",
         MEDIUM:
-          "Focus: Generics de base, Union/Intersection types, Utility Types (Partial, Pick), Interfaces complexes.",
-        HARD: "Focus: Advanced Generics, Mapped Types, Conditional Types, Type Guards, Décorateurs.",
+          "Focus: Generics, Union/Intersection, Utility Types, Interfaces complexes.",
+        HARD: "Focus: Advanced Generics, Mapped Types, Conditional Types, Type Guards.",
         EXPERT:
-          "Focus: Polymorphisme de types, Variadic Tuple Types, Architecture Hexagonale avec TS, Manipulation du compilateur (Infer).",
+          "Focus: Polymorphisme, Variadic Tuples, Architecture Hexagonale, Meta-programming.",
       },
       python: {
-        EASY: "Focus: Listes, Dictionnaires, List Comprehension, Fonctions, Gestion de fichiers.",
+        EASY: "Focus: Variables, Boucles, Conditions, Listes, Dicos, List Comprehension",
         MEDIUM:
-          "Focus: Décorateurs simples, Context Managers (with), Programmation Orientée Objet (Classes/Héritage), Exceptions.",
-        HARD: "Focus: Multi-threading vs Multi-processing, Metaclasses, Descripteurs, Itérateurs/Générateurs complexes.",
-        EXPERT:
-          "Focus: Optimisation via Cython/C-extensions, Architecture Asynchrone (Asyncio), Design Patterns avancés, Analyse de Bytecode.",
+          "Focus: Fonctions, Files, Décorateurs, Context Managers, POO (Classes), Exceptions.",
+        HARD: "Focus: Threading vs Processing, Metaclasses, Itérateurs/Générateurs.",
+        EXPERT: "Focus: Cython, Asyncio, Design Patterns, Bytecode Analysis.",
       },
       general: {
-        EASY: "Notions de base : syntaxe, logique simple, types.",
-        MEDIUM:
-          "Algorithmique moyenne, structures de données standard, asynchronisme.",
-        HARD: "Architecture de code, optimisation, paradigmes avancés.",
-        EXPERT: "Systèmes complexes, bas niveau, scalabilité, sécurité.",
+        EASY: "Syntaxe, logique simple, types.",
+        MEDIUM: "Algorithmique, structures de données, asynchronisme.",
+        HARD: "Architecture, optimisation, paradigmes avancés.",
+        EXPERT: "Systèmes complexes, scalabilité, sécurité, bas niveau.",
       },
     },
 
     progressive_template: `
-    ### PROTOCOLE DE MÉMOIRE LUMINA
-    Cible : Ingénieur en formation
+    ### ANALYSE DU PROFIL TECHNIQUE
     Langage : {{language}}
-    Niveau visé : {{difficulty}}
-    Directives de niveau : {{level_rules}}
+    Niveau actuel : {{difficulty}}
+    Contraintes de niveau : {{level_rules}}
 
-    ### ANALYSE DE L'HISTORIQUE (VUE LONG TERME)
+    ### HISTORIQUE DES SÉQUENCES
     {{last_exercises}}
 
-    ### MISSION DE LUMINA
-    1. Analyse les lacunes structurelles dans l'historique.
-    2. Identifie une notion précédemment abordée mais non maîtrisée ou nécessitant une révision (Répétition Espacée).
-    3. Crée un défi immersif qui combine cette révision avec une nouvelle compétence du niveau actuel.
-    4. L'énoncé doit exiger une réflexion sur la maintenabilité et la robustesse du code.
+    ### MISSION DU MENTOR
+    1. Identifie les points faibles dans l'historique de l'ingénieur.
+    2. Conçois un module de terrain qui combine une notion à réviser et une nouvelle compétence du niveau actuel.
+    3. L'énoncé doit être un cas d'usage professionnel (besoin métier réel).
+    4. Exige une réflexion sur la maintenabilité et la scalabilité.
 
     ### FORMAT DE RÉPONSE (JSON)
     {
-      "lumina_message": "Message d'accueil de Lumina analysant la progression et fixant l'objectif de session.",
-      "title": "Titre du défi",
-      "statement": "Énoncé détaillé avec contexte métier",
-      "expectedOutput": "Résultats techniques attendus",
-      "notion": "La notion d'architecture ou de logique enseignée"
+      "lumina_message": "Ton analyse de la progression de l'ingénieur et l'objectif du jour.",
+      "title": "Nom de la mission",
+      "statement": "Cahier des charges détaillé avec contexte technique",
+      "expectedOutput": "Spécifications de sortie attendues",
+      "notion": "La compétence technique centrale à valider"
     }`,
 
     capstone_template: `
-    ### SYNTHÈSE GLOBALE LUMINA (CAPSTONE)
+    ### VALIDATION DE CYCLE (CAPSTONE)
     Langage : {{language}}
-    Niveau global : {{difficulty}}
+    Niveau de certification : {{difficulty}}
     
-    ### ÉVALUATION DE PROGRESSION
+    ### ÉVALUATION DU PARCOURS
     {{last_exercises}}
 
-    ### MISSION DE LUMINA
-    L'élève achève un cycle de formation. Tu dois concevoir un projet 'Crystalline' qui fusionne l'intégralité des acquis.
-    Ce projet doit simuler une livraison en production réelle.
-    L'exigence est maximale sur la structure et la logique.
+    ### MISSION DU MENTOR
+    L'ingénieur achève son cycle. Tu dois concevoir un projet 'Crystalline' qui fusionne l'intégralité des acquis.
+    C'est une mise en production réelle simulée. L'exigence est maximale sur la structure.
 
     ### FORMAT DE RÉPONSE (JSON)
     {
-      "lumina_message": "Message de Lumina marquant l'importance de cette certification.",
+      "lumina_message": "Message marquant le passage à une étape supérieure de maîtrise.",
       "title": "Nom du Projet de Synthèse",
-      "statement": "Cahier des charges architectural complet",
-      "expectedOutput": "Vérifications de conformité technique",
-      "notion": "Synthèse de maîtrise globale"
+      "statement": "Architecture complète à implémenter",
+      "expectedOutput": "Critères de conformité technique",
+      "notion": "Synthèse globale de maîtrise"
     }`,
   },
 
   techwatch_generation: {
     template: `
-    ### PROTOCOLE DE CONVERSION VEILLE (LUMINA)
-    Article : {{article_title}}
-    Description : {{article_description}}
-    Langage cible : {{language}}
+    ### ANALYSE DE VEILLE TECHNIQUE
+    Sujet : {{article_title}}
+    Résumé : {{article_description}}
+    Cible : {{language}}
 
-    Ta mission est d'extraire le coeur technique de cette veille pour le transformer en un défi de terrain. Lumina doit guider l'élève dans cette nouvelle découverte.
+    Transforme le coeur technique de cette veille en une mission pratique pour l'ingénieur. Mentor-le dans cette découverte.
 
     ### FORMAT DE RÉPONSE (JSON)
     {
-      "lumina_message": "Message de Lumina expliquant l'intérêt de cette veille pour le futur de l'élève.",
-      "title": "...",
-      "statement": "...",
-      "expectedOutput": "...",
-      "notion": "..."
+      "lumina_message": "Explication de l'importance de cette technologie pour le futur du métier.",
+      "title": "Nom de la mission",
+      "statement": "Énoncé pratique basé sur la veille",
+      "expectedOutput": "Résultats techniques attendus",
+      "notion": "Concept clé extrait de la veille"
     }`,
   },
 
   exercise_validation: {
     template: `
-    ### PROTOCOLE DE VALIDATION LUMINA
-    Défi : {{title}}
-    Énoncé : {{statement}}
+    ### AUDIT DE CODE
+    Module : {{title}}
+    Spécifications : {{statement}}
     Attendu : {{expectedOutput}}
-    Langage : {{language}}
+    Stack : {{language}}
 
-    Code soumis par l'élève :
+    Implémentation soumise :
     \`\`\`{{language}}
     {{submitted_code}}
     \`\`\`
 
-    ### MISSION DE LUMINA
-    Tu es un auditeur de sécurité senior. Analyse le code soumis avec une rigueur mathématique.
-    1. Toute critique doit être étayée par une preuve logique (ex: "La ligne X peut causer un crash si...").
-    2. Ne donne pas de feedback générique ("peut être amélioré"). Sois chirurgical.
-    3. Si le code est parfait, admets-le et donne 100.
+    ### MISSION DE L'AUDITEUR
+    Analyse le code avec une rigueur d'architecte senior. 
+    1. Sois précis et technique (cite les lignes ou les patterns).
+    2. Pas de compliments vagues. Si c'est bon, valide. Si c'est mauvais, explique pourquoi (impact sur la perf, sécurité ou lisibilité).
+    3. Score : 100 seulement si c'est irréprochable.
 
-    ### GRILLE DE NOTATION (STRICTE)
-    - Fonctionnalités (40 pts) : Créer, Modifier, Supprimer, Journalisation. (-10 par manque)
-    - Sécurité (30 pts) : Permissions, Robustesse aux inputs, Exceptions, Thread-safety.
-    - Architecture (20 pts) : Idiomes modernes (RAII, Smart Pointers), O-notation, Lisibilité.
-    - Logging (10 pts) : Traçabilité complète des succès et échecs.
+    ### CRITÈRES D'ÉVALUATION
+    - Logique & Fonctionnalités (40 pts)
+    - Robustesse & Sécurité (30 pts)
+    - Architecture & Lisibilité (20 pts)
+    - Traçabilité & Logging (10 pts)
 
     ### FORMAT DE RÉPONSE (JSON)
     {
       "passed": boolean,
       "score": number,
-      "critiques_techniques": [
-        "Liste des failles réelles avec preuve par le code"
-      ],
+      "critiques_techniques": ["Défauts réels identifiés"],
       "learning_path": [
-        { "title": "Nom de la ressource/notion", "url": "Lien optionnel", "description": "Pourquoi étudier ça ?" }
+        { "title": "Ressource de perfectionnement", "url": "Lien utile", "description": "Pourquoi approfondir ce point ?" }
       ],
-      "points_forts": ["..."],
-      "feedback": "Message de Lumina global (concis et incisif)."
-    }
-    IMPORTANT: Si le score est < 100, le 'learning_path' doit être très précis (ex: 'Header <mutex> en C++', 'Pattern RAII', 'MDN: Promise.allSettled').`,
+      "points_forts": ["Points de maîtrise identifiés"],
+      "feedback": "Commentaire de l'auditeur (concis, incisif)."
+    }`,
   },
 };

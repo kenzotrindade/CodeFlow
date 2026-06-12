@@ -1,3 +1,5 @@
+import { Language as PrismaLanguage, Difficulty } from "@prisma/client";
+
 // #################################
 // ### Shared Types
 // #################################
@@ -46,11 +48,7 @@ export type Article = {
   };
 };
 
-export type Language = {
-  id: string;
-  name: string;
-  slug: string;
-};
+export type Language = PrismaLanguage;
 
 export const VALIDATION_MESSAGE = {
   PASSWORD:
@@ -59,3 +57,27 @@ export const VALIDATION_MESSAGE = {
     "Username must be between 3 and 20 characters and follow standard naming conventions.",
   EMAIL: "Please enter a valid email address.",
 };
+
+// ### AI Response Types
+
+export interface AIValidationResponse {
+  passed: boolean;
+  score: number;
+  critiques_techniques: string[];
+  learning_path: {
+    title: string;
+    url?: string;
+    description: string;
+  }[];
+  points_forts: string[];
+  feedback: string;
+}
+
+export interface AIGenerationResponse {
+  lumina_message: string;
+  title: string;
+  statement: string;
+  expectedOutput: string | object;
+  notion: string;
+  isCapstone?: boolean;
+}

@@ -130,9 +130,19 @@ body::before {
   mix-blend-mode: difference;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
+@media (min-width: 1800px) {
+  :root {
+    font-size: 22px;
+  }
 }
+
+@media (min-width: 2400px) {
+  :root {
+    font-size: 26px;
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
