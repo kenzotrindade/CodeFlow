@@ -12,31 +12,22 @@ export async function POST(req: Request) {
     const { email, password, name } = await req.json();
 
     if (!email || !password || !name) {
-      return NextResponse.json({ error: "Champs manquants" }, { status: 400 });
+      return NextResponse.json({ error: "Champs manquants" });
     }
 
     if (!REGEX.USERNAME.test(name))
-      return NextResponse.json(
-        { error: VALIDATION_MESSAGE.USERNAME },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: VALIDATION_MESSAGE.USERNAME });
+
     if (!REGEX.EMAIL.test(email))
-      return NextResponse.json(
-        { error: VALIDATION_MESSAGE.EMAIL },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: VALIDATION_MESSAGE.EMAIL });
+
     if (!REGEX.PASSWORD.test(password))
-      return NextResponse.json(
-        { error: VALIDATION_MESSAGE.PASSWORD },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: VALIDATION_MESSAGE.PASSWORD });
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
+
     if (existingUser)
-      return NextResponse.json(
-        { error: "Cet email est déjà utilisé" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Cet email est déjà utilisé" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -46,6 +37,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ message: "Inscription réussie" });
   } catch (error) {
-    return NextResponse.json({ error: "Erreur interne" }, { status: 500 });
+    return NextResponse.json({ error: "Erreur interne" });
   }
 }
