@@ -2,7 +2,6 @@
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
 import { REGEX, VALIDATION_MESSAGE, UpdatePayload } from "@/lib/types";
@@ -17,11 +16,15 @@ export async function updateAccount(formData: {
   password: string;
 }) {
   const session = await auth();
-  if (!session?.user?.id) redirect("/login");
+
+  if (!session?.user?.id) {
+    throw new Error("Non autorisé");
+  }
 
   try {
     if (!REGEX.USERNAME.test(formData.name))
       return { error: VALIDATION_MESSAGE.USERNAME };
+
     if (!REGEX.EMAIL.test(formData.email))
       return { error: VALIDATION_MESSAGE.EMAIL };
 
