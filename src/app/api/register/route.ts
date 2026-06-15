@@ -36,7 +36,8 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ message: "Inscription réussie" });
-  } catch (error) {
+  } catch (error: unknown) {
+    console.error("Erreur interne", error);
     return NextResponse.json({ error: "Erreur interne" });
   }
 }

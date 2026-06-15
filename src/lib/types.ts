@@ -23,8 +23,8 @@ export type LevelRule = {
 };
 
 export type LevelGuideLine = {
-  [key: string]: LevelRule | undefined;
   general: LevelRule;
+  [key: string]: LevelRule | undefined;
 };
 
 export type UpdatePayload = {
@@ -64,6 +64,7 @@ export interface AIValidationResponse {
   passed: boolean;
   score: number;
   critiques_techniques: string[];
+  hint?: string;
   learning_path: {
     title: string;
     url?: string;
@@ -75,6 +76,7 @@ export interface AIValidationResponse {
 
 export interface AIGenerationResponse {
   lumina_message: string;
+  recommend_capstone?: boolean;
   title: string;
   statement: string;
   expectedOutput: string | object;

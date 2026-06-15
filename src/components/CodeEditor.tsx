@@ -17,7 +17,7 @@ export default function CodeEditor({
   exerciseId: string;
   language: string;
   onValidation: (
-    result: { passed: boolean; feedback: string; score: number } | null,
+    result: { passed: boolean; feedback: string; score: number; hint?: string } | null,
   ) => void;
 }) {
   const [code, setCode] = useState("");
@@ -42,6 +42,7 @@ export default function CodeEditor({
           passed: result.passed,
           feedback: result.feedback,
           score: Number(result.score),
+          hint: result.hint,
         });
       }
     } catch (err) {
@@ -132,7 +133,7 @@ export default function CodeEditor({
           className={`relative h-10 px-10 group active:scale-95 transition-all disabled:opacity-50 overflow-hidden ${isEvaluating ? "cursor-wait" : ""}`}
         >
           <div
-            className={`absolute inset-0 skew-x-[-12deg] transition-colors ${isEvaluating ? "bg-white/5 animate-pulse" : "bg-pink-600 group-hover:bg-pink-500"}`}
+            className={`absolute inset-0 -skew-x-12 transition-colors ${isEvaluating ? "bg-white/5 animate-pulse" : "bg-pink-600 group-hover:bg-pink-500"}`}
           />
           <span className="relative flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-white">
             {isEvaluating ? (

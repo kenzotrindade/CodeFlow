@@ -46,7 +46,7 @@ export async function updateAccount(formData: {
 
     revalidatePath("/account");
     return { success: true };
-  } catch (error) {
-    return { error: "Erreur lors de la mise à jour" };
+  } catch (error: unknown) {
+    console.log("Erreur lors de la mise à jour", error);
   }
 }

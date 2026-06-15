@@ -76,7 +76,7 @@ export default function AccountForm({ user }: Readonly<AccountFormProps>) {
 
       <div className="space-y-4">
         <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300/50 block">
-          Nouveau mot de passe (optionnel)
+          Nouveau mot de passe
         </label>
         <input
           type="password"

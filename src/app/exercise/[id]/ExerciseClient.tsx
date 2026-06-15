@@ -34,15 +34,16 @@ export default function ExerciseClient({
 }: Readonly<ExerciseClientProps>) {
   const [validationResult, setValidationResult] =
     useState<AIValidationResponse | null>(null);
+  const [showHint, setShowHint] = useState(false);
 
   const handleValidation = (result: any) => {
     setValidationResult(result);
+    setShowHint(false);
   };
 
   return (
     <div className="min-h-screen pt-32 pb-20 flex flex-col bg-[radial-gradient(circle_at_50%_0%,rgba(236,72,153,0.03)_0%,transparent_50%)]">
-      {/* Header Contextuel */}
-      <header className="container mx-auto px-6 max-w-[1900px] mb-12">
+      <header className="container mx-auto px-6 max-w-475 mb-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-10">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
@@ -61,7 +62,7 @@ export default function ExerciseClient({
 
           {validationResult && (
             <aside
-              className="flex items-center gap-6 bg-white/[0.02] border border-white/10 p-6 backdrop-blur-xl animate-in fade-in zoom-in duration-500 relative group"
+              className="flex items-center gap-6 bg-white/2 border border-white/10 p-6 backdrop-blur-xl animate-in fade-in zoom-in duration-500 relative group"
               aria-label="Résultat de l'audit"
             >
               <div
@@ -70,7 +71,7 @@ export default function ExerciseClient({
               />
               <div className="text-right relative">
                 <div className="text-[9px] uppercase tracking-[0.3em] text-white/30 font-black mb-1">
-                  Audit d'Intégrité
+                  Audit d&apos;Intégrité
                 </div>
                 <div
                   className={`text-4xl font-black italic ${validationResult.passed ? "text-green-500" : "text-red-500"}`}
@@ -98,9 +99,8 @@ export default function ExerciseClient({
         </div>
       </header>
 
-      <div className="container mx-auto px-6 max-w-[1900px]">
+      <div className="container mx-auto px-6 max-w-475">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-          {/* Col Gauche : Mentor & Feedback */}
           <section
             className="lg:col-span-5 space-y-12"
             aria-label="Énoncé et retours"
@@ -124,14 +124,40 @@ export default function ExerciseClient({
                       className="w-4 h-4 text-purple-500/60"
                       aria-hidden="true"
                     />
-                    Analyse de l'Architecte
+                    Analyse de l&apos;Architecte
                   </div>
                   <div
-                    className={`p-8 border-l-4 bg-white/[0.01] backdrop-blur-sm ${validationResult.passed ? "border-green-500" : "border-red-500"}`}
+                    className={`p-8 border-l-4 bg-white/1 backdrop-blur-sm ${validationResult.passed ? "border-green-500" : "border-red-500"}`}
                   >
                     <p className="text-base text-purple-100/90 leading-relaxed font-mono italic">
-                      "{validationResult.feedback}"
+                      &quot;{validationResult.feedback}&quot;
                     </p>
+
+                    {validationResult && (
+                      <div className="mt-6 pt-6 border-t border-white/10">
+                        <button
+                          onClick={() => setShowHint(!showHint)}
+                          className="text-[10px] font-black uppercase tracking-[0.2em] text-pink-500 hover:text-pink-400 transition-colors flex items-center gap-2"
+                        >
+                          <Info className="w-3 h-3" />{" "}
+                          {showHint
+                            ? "Masquer l'indice"
+                            : "Besoin d'un indice ?"}
+                        </button>
+
+                        {showHint && (
+                          <div className="mt-4 bg-pink-500/5 p-4 border border-pink-500/20">
+                            <p className="text-xs text-pink-100/80 leading-relaxed italic">
+                              <span className="font-bold text-pink-500">
+                                INDICE :
+                              </span>
+                              {validationResult.hint ||
+                                "L'IA n'a pas généré d'indice pour cette soumission."}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </section>
 
@@ -146,7 +172,7 @@ export default function ExerciseClient({
                         {validationResult.learning_path.map((item, idx) => (
                           <article
                             key={idx}
-                            className="bg-white/[0.02] border border-white/5 p-6 hover:bg-white/[0.04] transition-all group border-l border-l-transparent hover:border-l-pink-500"
+                            className="bg-white/2 border border-white/5 p-6 hover:bg-white/4 transition-all group border-l border-l-transparent hover:border-l-pink-500"
                           >
                             <div className="flex items-center justify-between mb-3">
                               <h4 className="text-[12px] font-black uppercase tracking-widest text-white/80 group-hover:text-white transition-colors">
@@ -180,7 +206,7 @@ export default function ExerciseClient({
 
             {!validationResult && (
               <div
-                className="bg-white/[0.01] border border-white/5 p-6 flex items-start gap-4 opacity-40"
+                className="bg-white/1 border border-white/5 p-6 flex items-start gap-4 opacity-40"
                 role="status"
               >
                 <Info
@@ -195,13 +221,12 @@ export default function ExerciseClient({
             )}
           </section>
 
-          {/* Col Droite : Éditeur & Validation */}
           <section
             className="lg:col-span-7 space-y-10"
             aria-label="Zone d'implémentation"
           >
             <div className="sticky top-32 space-y-10">
-              <div className="h-[600px] shadow-2xl">
+              <div className="h-150 shadow-2xl">
                 <CodeEditor
                   exerciseId={exercise.id}
                   language={exercise.language.name}
@@ -211,14 +236,14 @@ export default function ExerciseClient({
               </div>
 
               <div
-                className={`card-fragment p-10 flex flex-col md:flex-row items-center justify-between gap-10 border-white/5 bg-linear-to-r from-white/[0.02] to-transparent transition-all duration-1000 ${!validationResult?.passed ? "opacity-20 grayscale pointer-events-none scale-[0.98]" : "opacity-100 shadow-[0_20px_50px_rgba(236,72,153,0.1)] scale-100"}`}
+                className={`card-fragment p-10 flex flex-col md:flex-row items-center justify-between gap-10 border-white/5 bg-linear-to-r from-white/2 to-transparent transition-all duration-1000 ${validationResult?.passed ? "opacity-100 shadow-[0_20px_50px_rgba(236,72,153,0.1)] scale-100" : "opacity-20 grayscale pointer-events-none scale-[0.98]"}`}
               >
                 <div className="space-y-2">
                   <h3 className="text-white font-black uppercase tracking-[0.3em] text-sm">
                     Validation du Flux
                   </h3>
                   <p className="text-[10px] text-purple-100/30 font-mono uppercase tracking-widest">
-                    Signature d'intégrité prête pour archivage
+                    Signature d&apos;intégrité prête pour archivage
                   </p>
                 </div>
 

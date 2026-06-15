@@ -27,6 +27,13 @@ export default function Register() {
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const isPasswordValid = passwordRules.every((rule) => rule.test(password));
+    if (!isPasswordValid) {
+      setError("Veuillez respecter toutes les règles de sécurité du mot de passe.");
+      return;
+    }
+
     setLoading(true);
     setError("");
 

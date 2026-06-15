@@ -142,6 +142,15 @@ body::before {
   }
 }
 
+@keyframes aura-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.02); }
+}
+
+.animate-aura {
+  animation: aura-pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
@@ -149,6 +158,6 @@ body::before {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: rgba(236, 72, 153, 0.1);
 }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(236, 72, 153, 0.3);
+button, .cursor-pointer {
+  cursor: pointer !important;
 }

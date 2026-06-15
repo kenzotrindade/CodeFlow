@@ -8,9 +8,7 @@ import { promptForm } from "@/lib/types";
 import { toast } from "sonner";
 import { ChevronDown } from "lucide-react";
 
-// #################################
-// ### Dashboard Form
-// #################################
+import { CapstoneModal } from "@/components/CapstoneModal";
 
 export default function DashboardForms({
   languages,
@@ -51,24 +49,24 @@ export default function DashboardForms({
       const lang = languages.find((l) => l.id === selectedLangId);
       if (!lang) return;
 
-      const exercise = await GeneratePrompt({
+      const result = await GeneratePrompt({
         language: lang,
         difficulty: selectedDiff as Difficulty,
         promptArgs: promptForm.progressive,
       });
 
-      if (!exercise) {
+      if (!result) {
         toast.error("Échec de la génération");
         return;
       }
 
       toast.success("Prisme forgé !");
 
-      if (exercise.isCapstone) {
-        setLastGeneratedId(exercise.id);
+      if (result.recommendCapstone) {
+        setLastGeneratedId(result.exercise.id);
         setShowProjectModal(true);
       } else {
-        router.push(`/exercise/${exercise.id}`);
+        router.push(`/exercise/${result.exercise?.id}`);
       }
     });
   };
@@ -89,7 +87,7 @@ export default function DashboardForms({
           </button>
 
           {isLangOpen && (
-            <div className="absolute top-full left-0 w-full mt-1 bg-[#0d0414] border-l-2 border-pink-500 shadow-2xl z-[100] overflow-hidden animate-in fade-in slide-in-from-top-2">
+            <div className="absolute top-full left-0 w-full mt-1 bg-[#0d0414] border-l-2 border-pink-500 shadow-2xl z-100 overflow-hidden animate-in fade-in slide-in-from-top-2">
               {languages.map((lang) => (
                 <button
                   key={lang.id}
@@ -99,7 +97,7 @@ export default function DashboardForms({
                     setSelectedLangId(lang.id);
                     setIsLangOpen(false);
                   }}
-                  className={`w-full text-left px-4 py-3 text-[13px] font-black uppercase tracking-widest transition-colors hover:bg-white/5 ${selectedLangId === lang.id ? "text-pink-500 bg-white/[0.02]" : "text-white/60"}`}
+                  className={`w-full text-left px-4 py-3 text-[13px] font-black uppercase tracking-widest transition-colors hover:bg-white/5 ${selectedLangId === lang.id ? "text-pink-500 bg-white/2" : "text-white/60"}`}
                 >
                   {lang.name}
                 </button>
@@ -121,7 +119,7 @@ export default function DashboardForms({
           </button>
 
           {isDiffOpen && (
-            <div className="absolute top-full left-0 w-full mt-1 bg-[#0d0414] border-l-2 border-pink-500 shadow-2xl z-[100] overflow-hidden animate-in fade-in slide-in-from-top-2">
+            <div className="absolute top-full left-0 w-full mt-1 bg-[#0d0414] border-l-2 border-pink-500 shadow-2xl z-100 overflow-hidden animate-in fade-in slide-in-from-top-2">
               {difficulties.map((level) => (
                 <button
                   key={level}
@@ -131,7 +129,7 @@ export default function DashboardForms({
                     setSelectedDiff(level);
                     setIsDiffOpen(false);
                   }}
-                  className={`w-full text-left px-4 py-3 text-[13px] font-black uppercase tracking-widest transition-colors hover:bg-white/5 ${selectedDiff === level ? "text-pink-500 bg-white/[0.02]" : "text-white/60"}`}
+                  className={`w-full text-left px-4 py-3 text-[13px] font-black uppercase tracking-widest transition-colors hover:bg-white/5 ${selectedDiff === level ? "text-pink-500 bg-white/2" : "text-white/60"}`}
                 >
                   {level}
                 </button>
@@ -147,37 +145,17 @@ export default function DashboardForms({
         disabled={isPending}
         className="relative h-10 px-12 group active:scale-95 transition-all disabled:opacity-50"
       >
-        <div className="absolute inset-0 bg-pink-600 skew-x-[-12deg] group-hover:bg-pink-500 transition-colors shadow-[0_0_25px_rgba(236,72,153,0.3)]" />
+        <div className="absolute inset-0 bg-pink-600 -skew-x-12 group-hover:bg-pink-500 transition-colors shadow-[0_0_25px_rgba(236,72,153,0.3)]" />
         <span className="relative text-[14px] font-black uppercase tracking-[0.4em] text-white">
           {isPending ? "SCAN..." : "GÉNÉRER"}
         </span>
       </button>
 
       {showProjectModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/90 backdrop-blur-md">
-          <div className="card-fragment max-w-sm w-full border-pink-500 border-2 text-center !overflow-visible">
-            <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-4 text-white">
-              Maitrise
-            </h2>
-            <p className="text-purple-200/60 text-xs mb-8 leading-relaxed uppercase tracking-widest">
-              Séquence d'apprentissage terminée. Projet de synthèse requis.
-            </p>
-            <div className="flex flex-col gap-3">
-              <button
-                onClick={() => router.push(`/exercise/${lastGeneratedId}`)}
-                className="btn-prism w-full"
-              >
-                LANCER L'ÉVALUATION
-              </button>
-              <button
-                onClick={() => setShowProjectModal(false)}
-                className="text-[9px] uppercase font-black tracking-widest text-white/20 hover:text-white transition-colors"
-              >
-                Différer
-              </button>
-            </div>
-          </div>
-        </div>
+        <CapstoneModal
+          onAccept={() => router.push(`/exercise/${lastGeneratedId}`)}
+          onClose={() => setShowProjectModal(false)}
+        />
       )}
     </div>
   );

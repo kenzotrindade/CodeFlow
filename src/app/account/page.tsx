@@ -31,7 +31,7 @@ export default async function AccountPage() {
   }
 
   return (
-    <div className="container mx-auto px-6 max-w-[1900px] pt-12 pb-20">
+    <div className="container mx-auto px-6 max-w-475 pt-12 pb-20">
       <header className="mb-16 border-b border-white/10 pb-12">
         <div className="space-y-4">
           <h1 className="text-6xl font-black italic tracking-tighter mix-diff uppercase mb-2">

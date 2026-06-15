@@ -39,7 +39,7 @@ export async function validateCode(exerciseId: string, submittedCode: string) {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return { error: "Session expirée" };
+    throw new Error("Non autorisé");
   }
 
   const exercise = await prisma.exercise.findUnique({
@@ -48,7 +48,7 @@ export async function validateCode(exerciseId: string, submittedCode: string) {
   });
 
   if (!exercise) {
-    return { error: "Exercise non trouvé !" };
+    return { error: "Exercice non trouvé !" };
   }
 
   const finalPrompt = fillTemplate(prompts.exercise_validation.template, {
@@ -92,8 +92,9 @@ export async function validateCode(exerciseId: string, submittedCode: string) {
     return {
       passed: result.passed,
       feedback: result.feedback,
-      score,
+      score: score,
       learningPath: result.learning_path || [],
+      hint: result.hint,
     };
   } catch (error) {
     console.error("Erreur de validation :", error);

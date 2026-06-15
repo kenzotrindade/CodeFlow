@@ -44,13 +44,13 @@ export async function TechwatchPrompt({
     const content = completion.choices[0].message.content;
 
     if (!content) {
-      return null;
+      return { error: "Lumina doit être en pause café..." };
     }
 
     const data = parseAIResponse<AIGenerationResponse>(content);
 
     if (!data) {
-      return null;
+      return { error: "Lumina n'arrive pas à crée un audit !" };
     }
 
     const luminaHeader = data.lumina_message

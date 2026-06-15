@@ -13,7 +13,8 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Statistiques | CodeFlow",
-  description: "Analysez votre progression technique, visualisez vos succès et accédez à votre archive complète de missions.",
+  description:
+    "Analysez votre progression technique, visualisez vos succès et accédez à votre archive complète de missions.",
 };
 
 export default async function ExercisesPage() {
@@ -24,7 +25,7 @@ export default async function ExercisesPage() {
   }
 
   const allAttempts = await prisma.exerciseAttempt.findMany({
-    where: { userId: session.user.id },
+    where: { userId: session?.user?.id },
     include: { exercise: { include: { language: true } } },
     orderBy: { createdAt: "desc" },
   });
@@ -66,7 +67,7 @@ export default async function ExercisesPage() {
       : 0;
 
   return (
-    <div className="container mx-auto px-6 max-w-[1900px] pt-12 pb-20">
+    <div className="container mx-auto px-6 max-w-475 pt-12 pb-20">
       <header className="mb-16 border-b border-white/10 pb-12">
         <div className="space-y-4">
           <h1 className="text-6xl font-black italic tracking-tighter mix-diff uppercase mb-2">
@@ -93,7 +94,10 @@ export default async function ExercisesPage() {
 
       <section aria-labelledby="history-journal-title">
         <div className="flex items-center gap-6 mb-12">
-          <h2 id="history-journal-title" className="text-[12px] font-black uppercase tracking-[0.5em] text-white/40 whitespace-nowrap">
+          <h2
+            id="history-journal-title"
+            className="text-[12px] font-black uppercase tracking-[0.5em] text-white/40 whitespace-nowrap"
+          >
             Journal de Bord
           </h2>
           <div className="h-px grow bg-white/10" aria-hidden="true" />
@@ -123,7 +127,9 @@ export default async function ExercisesPage() {
                     <span className="mx-2">•</span>
                     <span>{p.exercise.difficulty}</span>
                     <span className="mx-2">•</span>
-                    <time dateTime={p.createdAt.toISOString()}>{new Date(p.createdAt).toLocaleDateString()}</time>
+                    <time dateTime={p.createdAt.toISOString()}>
+                      {new Date(p.createdAt).toLocaleDateString()}
+                    </time>
                   </div>
                 </div>
               </div>
@@ -156,7 +162,9 @@ export default async function ExercisesPage() {
           ))}
           {allAttempts.length === 0 && (
             <div className="py-20 card-fragment flex flex-col items-center justify-center border-dashed border-white/10 opacity-60">
-              <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white/50">Aucune séquence enregistrée</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white/50">
+                Aucune séquence enregistrée
+              </p>
             </div>
           )}
         </div>
