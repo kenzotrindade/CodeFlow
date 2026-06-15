@@ -57,7 +57,7 @@ export async function TechwatchPrompt({
       ? `MESSAGE DE LUMINA : \n${data.lumina_message}\n\n---\n\n`
       : "";
 
-    return await prisma.exercise.create({
+    const exercise = await prisma.exercise.create({
       data: {
         title: data.title,
         statement: `${luminaHeader}${data.statement}`,
@@ -76,6 +76,11 @@ export async function TechwatchPrompt({
         },
       },
     });
+
+    return {
+      exercise,
+      recommendCapstone: false,
+    }
   } catch (error) {
     console.error("Techwatch Generation Error:", error);
     return null;

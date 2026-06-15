@@ -12,15 +12,22 @@ import { validateCode } from "@/app/actions/exercise";
 export default function CodeEditor({
   exerciseId,
   language,
+  initialCode = "",
   onValidation,
-}: {
+}: Readonly<{
   exerciseId: string;
   language: string;
+  initialCode?: string;
   onValidation: (
-    result: { passed: boolean; feedback: string; score: number; hint?: string } | null,
+    result: {
+      passed: boolean;
+      feedback: string;
+      score: number;
+      hint?: string;
+    } | null,
   ) => void;
-}) {
-  const [code, setCode] = useState("");
+}>) {
+  const [code, setCode] = useState(initialCode);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const editorRef = useRef<any>(null);
@@ -39,8 +46,8 @@ export default function CodeEditor({
         onValidation(null);
       } else {
         onValidation({
-          passed: result.passed,
-          feedback: result.feedback,
+          passed: typeof result.passed === "boolean" ? result.passed : false,
+          feedback: result.feedback || "Aucun feedback généré.",
           score: Number(result.score),
           hint: result.hint,
         });

@@ -6,8 +6,8 @@ import { prompts } from "@/lib/prompts/prompts";
 import { auth } from "@/lib/auth";
 import {
   promptForm,
-  LevelGuideLine,
   AIGenerationResponse,
+  LevelGuideLine,
   LevelRule,
 } from "@/lib/types";
 import { client } from "@/lib/openai";
@@ -52,10 +52,12 @@ export async function GeneratePrompt({
     )
     .join("\n");
 
-  const levelGuidelines = prompts.exercise_generation.level_guidelines;
+  const levelGuidelines: LevelGuideLine =
+    prompts.exercise_generation.level_guidelines;
   const langKey = language.name.toLowerCase();
   const langRules = levelGuidelines[langKey] || levelGuidelines.general;
-  const specificRule = langRules[difficulty] || langRules["EASY"];
+  const specificRule =
+    langRules[difficulty as keyof LevelRule] || langRules["EASY"];
 
   const isCapstone = promptArgs === promptForm.capstone;
   const template = isCapstone

@@ -56,16 +56,16 @@ export default function TechWatchList({
   const handleGenerate = (art: Article, index: number) => {
     setLoadingId(index);
     startTransition(async () => {
-      const exercise = await TechwatchPrompt({
+      const result = await TechwatchPrompt({
         title: art.title,
         description: art.description,
         languageId: currentLang.id,
         languageName: currentLang.name,
       });
 
-      if (exercise) {
+      if (result?.exercise?.id) {
         toast.success("Défi généré !");
-        router.push(`/exercise/${exercise.id}`);
+        router.push(`/exercise/${result.exercise.id}`);
       } else {
         toast.error("Échec de la conversion");
       }
@@ -88,7 +88,6 @@ export default function TechWatchList({
             </p>
           </div>
 
-          {/* Sélecteur aligné sémantiquement */}
           <nav
             className="relative min-w-55 z-50"
             ref={dropdownRef}
