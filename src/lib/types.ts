@@ -83,3 +83,10 @@ export interface AIGenerationResponse {
   notion: string;
   isCapstone?: boolean;
 }
+
+export type GeneratePromptParams = {
+  language: Language;
+  difficulty: Difficulty;
+  notion?: string;
+  promptArgs?: promptForm;
+};

@@ -52,12 +52,10 @@ export async function GeneratePrompt({
     )
     .join("\n");
 
-  const levelGuidelines: LevelGuideLine =
-    prompts.exercise_generation.level_guidelines;
+  const levelGuidelines: LevelGuideLine = prompts.exercise_generation.level_guidelines;
   const langKey = language.name.toLowerCase();
   const langRules = levelGuidelines[langKey] || levelGuidelines.general;
-  const specificRule =
-    langRules[difficulty as keyof LevelRule] || langRules["EASY"];
+  const specificRule = langRules[difficulty as keyof LevelRule] || langRules["EASY"];
 
   const isCapstone = promptArgs === promptForm.capstone;
   const template = isCapstone

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Zap, TrendingUp, Cpu, Globe } from "lucide-react";
+import { TrendingUp, Cpu, Globe } from "lucide-react";
 import type { Metadata } from "next";
 
 // #################################
@@ -44,7 +44,7 @@ export default function Home() {
         <p className="max-w-2xl mx-auto text-center text-lg md:text-2xl font-light leading-relaxed text-purple-100/80 mb-16 px-4">
           L&apos;écosystème ultime pour forger vos compétences.
           <span className="text-white font-medium block mt-2">
-            Générez des défis, analysez le flux, maîtrisez la machine.
+            Générez des défis, analysez vos erreurs, maîtrisez votre machine.
           </span>
         </p>
 
@@ -52,7 +52,6 @@ export default function Home() {
           <Link href="/dashboard" className="btn-prism group relative">
             <span className="relative z-10 flex items-center gap-2">
               Lancer l&apos;expérience{" "}
-              <Zap className="w-4 h-4 fill-current" aria-hidden="true" />
             </span>
           </Link>
           <Link
@@ -70,7 +69,7 @@ export default function Home() {
       >
         {[
           {
-            title: "Architecture IA",
+            title: "Lumina IA",
             desc: "Algorithmes génératifs entraînés pour sculpter des exercices sur-mesure selon votre stack.",
             icon: <Cpu className="w-8 h-8 text-pink-500" />,
             index: "01",
@@ -121,20 +120,20 @@ export default function Home() {
       <section className="w-full max-w-475 mb-32 border-y border-white/10 py-20 flex flex-col md:flex-row gap-16 items-center">
         <div className="flex-1">
           <h2 className="text-5xl font-black italic tracking-tighter uppercase mb-8">
-            Plus qu'un <br />
+            Plus qu&apos;un <br />
             <span className="text-pink-500">Simple Code.</span>
           </h2>
           <div className="space-y-6 text-purple-100/70 text-lg leading-relaxed">
             <p>
-              Nous croyons que l&apos;apprentissage est un processus géométrique.
-              Chaque ligne de code est un segment, chaque fonction une forme,
-              chaque application un prisme.
+              Nous croyons que l&apos;apprentissage est un processus
+              géométrique. Chaque ligne de code est un segment, chaque fonction
+              une forme, chaque application un prisme.
             </p>
             <p>
-              CodeFlow n&apos;est pas qu&apos;une plateforme d&apos;exercice. C&apos;est un
-              accélérateur de particules intellectuelles conçu pour les
-              développeurs qui ne se contentent pas de copier, mais qui veulent
-              comprendre la structure même du flux.
+              CodeFlow n&apos;est pas qu&apos;une plateforme d&apos;exercice.
+              C&apos;est un accélérateur de particules intellectuelles conçu
+              pour les développeurs qui ne se contentent pas de copier, mais qui
+              veulent comprendre la structure même du flux.
             </p>
           </div>
           <div className="mt-12 flex gap-12">
@@ -193,17 +192,6 @@ export default function Home() {
 
       <footer className="mt-32 w-full max-w-[1900px] pt-12 border-t border-white/10 flex justify-between items-center text-[10px] font-mono uppercase tracking-[0.3em] text-white/40">
         <div>© 2026 CODEFLOW</div>
-        <nav className="flex gap-8" aria-label="Liens secondaires">
-          <a href="#" className="hover:text-white transition-colors">
-            Github
-          </a>
-          <a href="#" className="hover:text-white transition-colors">
-            Documentation
-          </a>
-          <a href="#" className="hover:text-white transition-colors">
-            Legal
-          </a>
-        </nav>
       </footer>
     </div>
   );
