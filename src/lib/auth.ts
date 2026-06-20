@@ -12,7 +12,8 @@ import bcrypt from "bcryptjs";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma),
-  session: { strategy: "jwt" },
+  session: { strategy: "jwt", maxAge: 60 * 60 * 24 },
+  jwt: { maxAge: 60 * 60 * 24 },
   providers: [
     GitHub({
       clientId: process.env.GITHUB_ID,
