@@ -15,12 +15,6 @@ enum Difficulty {
   EXPERT
 }
 
-enum FrequencyType {
-  DAILY
-  WEEKLY
-  MONTHLY
-}
-
 enum AttemptStatus {
   PENDING
   STARTED
@@ -32,10 +26,8 @@ model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
-  emailVerified DateTime?
   image         String?
   password      String?
-  githubId      String?   @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -43,7 +35,6 @@ model User {
   accounts  Account[]
   sessions  Session[]
 
-  preferences UserLanguagePreference[]
   attempts    ExerciseAttempt[]
   exercises   Exercise[]               @relation("UserExercises")
 }
@@ -56,30 +47,7 @@ model Language {
 
   createdAt DateTime @default(now())
 
-  preferences UserLanguagePreference[]
   exercises   Exercise[]
-}
-
-model UserLanguagePreference {
-  id String @id @default(cuid())
-
-  userId     String
-  languageId String
-
-  difficulty Difficulty
-
-  frequencyType  FrequencyType
-  frequencyCount Int
-  selectedDays   Int[]
-
-  active Boolean @default(true)
-
-  createdAt DateTime @default(now())
-
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, languageId])
 }
 
 model Exercise {
@@ -87,8 +55,6 @@ model Exercise {
 
   title          String
   statement      String   @db.Text
-  notion         String?
-  codeSnippet    String?  @db.Text
   expectedOutput String   @db.Text
 
   difficulty Difficulty
@@ -117,8 +83,6 @@ model ExerciseAttempt {
 
   status AttemptStatus @default(PENDING)
 
-  replayed Boolean @default(false)
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -136,13 +100,10 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
   access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
-  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -156,12 +117,4 @@ model Session {
   expires      DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
 }
