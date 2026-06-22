@@ -4,11 +4,7 @@ import prisma from "@/lib/prisma";
 import { Language, Difficulty } from "@prisma/client";
 import { prompts } from "@/lib/prompts/prompts";
 import { auth } from "@/lib/auth";
-import {
-  promptForm,
-  AIGenerationResponse,
-  LevelGuideLine,
-} from "@/lib/types";
+import { promptForm, AIGenerationResponse, LevelGuideLine } from "@/lib/types";
 import { client } from "@/lib/openai";
 import { fillTemplate, parseAIResponse } from "@/lib/utils";
 
@@ -51,7 +47,8 @@ export async function GeneratePrompt({
     )
     .join("\n");
 
-  const levelGuidelines: LevelGuideLine = prompts.exercise_generation.level_guidelines;
+  const levelGuidelines: LevelGuideLine =
+    prompts.exercise_generation.level_guidelines;
   const langKey = language.name.toLowerCase();
   const langRules = levelGuidelines[langKey] || levelGuidelines.general;
   const specificRule = langRules[difficulty] || langRules["EASY"];
@@ -100,7 +97,6 @@ export async function GeneratePrompt({
           typeof data.expectedOutput === "object"
             ? JSON.stringify(data.expectedOutput, null, 2)
             : data.expectedOutput,
-        notion: data.notion || "Concept technique",
         isCapstone: isCapstone,
         difficulty: difficulty,
         languageId: language.id,

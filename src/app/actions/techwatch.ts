@@ -65,7 +65,6 @@ export async function TechwatchPrompt({
           typeof data.expectedOutput === "object"
             ? JSON.stringify(data.expectedOutput, null, 2)
             : data.expectedOutput,
-        notion: data.notion || "Veille technologique",
         difficulty: "MEDIUM",
         languageId,
         creatorId: session?.user?.id || null,
@@ -80,7 +79,7 @@ export async function TechwatchPrompt({
     return {
       exercise,
       recommendCapstone: false,
-    }
+    };
   } catch (error) {
     console.error("Techwatch Generation Error:", error);
     return null;
