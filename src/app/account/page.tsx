@@ -40,7 +40,7 @@ export default async function AccountPage() {
           <div className="h-1.5 w-32 bg-pink-500 mb-6" aria-hidden="true" />
           <p className="text-[12px] text-purple-100/80 font-mono tracking-[0.4em] uppercase flex items-center gap-3">
             <User className="w-4 h-4 text-pink-500" aria-hidden="true" />
-            Paramètres du fragment utilisateur
+            Paramètres de l&apos;utilisateur
           </p>
         </div>
       </header>

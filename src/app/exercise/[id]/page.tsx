@@ -2,6 +2,10 @@ import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import ExerciseClient from "./ExerciseClient";
 
+// #################################
+// ### Exercise Page
+// #################################
+
 export default async function ExercisePage({
   params,
 }: Readonly<{

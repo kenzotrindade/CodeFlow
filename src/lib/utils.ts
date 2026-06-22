@@ -13,8 +13,8 @@ export function fillTemplate(template: string, values: Record<string, string>) {
 export function parseAIResponse<T>(content: string): T | null {
   try {
     const cleaned = content
-      .replace(/```json/g, "")
-      .replace(/```/g, "")
+      .replaceAll('```json', "")
+      .replaceAll('```', "")
       .trim();
     return JSON.parse(cleaned) as T;
   } catch (error) {

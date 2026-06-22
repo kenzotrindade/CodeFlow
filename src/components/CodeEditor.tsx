@@ -75,7 +75,7 @@ export default function CodeEditor({
         </div>
       </div>
 
-      <div className="flex-grow bg-[#0a0414] py-4">
+      <div className="grow bg-[#0a0414] py-4">
         <Editor
           height="100%"
           language={language.toLowerCase()}

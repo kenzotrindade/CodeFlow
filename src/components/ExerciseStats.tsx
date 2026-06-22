@@ -23,7 +23,7 @@ type StatsProps = {
 
 const COLORS = ["#ec4899", "#a855f7", "#5b21b6", "#1e1b4b", "#4c1d95"];
 
-export default function ExerciseStats({ data }: StatsProps) {
+export default function ExerciseStats({ data }: Readonly<StatsProps>) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <div className="card-fragment flex flex-col justify-center items-center text-center p-6">
@@ -44,11 +44,11 @@ export default function ExerciseStats({ data }: StatsProps) {
         </span>
       </div>
 
-      <div className="card-fragment md:col-span-1 lg:col-span-2 p-6 min-h-[200px]">
+      <div className="card-fragment md:col-span-1 lg:col-span-2 p-6 min-h-50">
         <h3 className="text-[12px] xl:text-[14px] uppercase tracking-[0.2em] font-black text-purple-300/50 mb-4">
           Distribution des Langages
         </h3>
-        <div className="h-[150px] w-full">
+        <div className="h-37.5 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -82,9 +82,9 @@ export default function ExerciseStats({ data }: StatsProps) {
 
       <div className="card-fragment md:col-span-2 lg:col-span-4 p-8">
         <h3 className="text-[12px] xl:text-[14px] uppercase tracking-[0.2em] font-black text-purple-300/50 mb-8">
-          Flux d'Activité Hebdomadaire
+          Flux d&apos;Activité Hebdomadaire
         </h3>
-        <div className="h-[250px] w-full">
+        <div className="h-62.5 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data.attemptsByDay}>
               <XAxis

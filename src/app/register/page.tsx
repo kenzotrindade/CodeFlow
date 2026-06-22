@@ -114,7 +114,7 @@ export default function Register() {
 
           <div className="space-y-1">
             <label htmlFor="password" title="Utilisez au moins 12 caractères avec majuscules, chiffres et symboles" className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-100/60">
-              Clef d'accès
+              Clef d&apos;accès
             </label>
             <input
               id="password"
@@ -162,7 +162,7 @@ export default function Register() {
             className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/60 hover:text-pink-500 transition-colors border-b border-white/20 pb-1"
             disabled={loading}
           >
-            S'inscrire avec GitHub
+            S&apos;inscrire avec GitHub
           </button>
 
           <p className="text-xs text-purple-100/50 font-medium italic">

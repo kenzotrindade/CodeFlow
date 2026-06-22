@@ -91,7 +91,7 @@ export default function DashboardForms({
           </button>
 
           {isLangOpen && (
-            <div className="absolute top-full left-0 w-full mt-1 bg-[#0d0414] border-l-2 border-pink-500 shadow-2xl z-[100] overflow-hidden animate-in fade-in slide-in-from-top-2">
+            <div className="absolute top-full left-0 w-full mt-1 bg-[#0d0414] border-l-2 border-pink-500 shadow-2xl z-100 overflow-hidden animate-in fade-in slide-in-from-top-2">
               {languages.map((lang) => (
                 <button
                   key={lang.id}
@@ -123,7 +123,7 @@ export default function DashboardForms({
           </button>
 
           {isDiffOpen && (
-            <div className="absolute top-full left-0 w-full mt-1 bg-[#0d0414] border-l-2 border-pink-500 shadow-2xl z-[100] overflow-hidden animate-in fade-in slide-in-from-top-2">
+            <div className="absolute top-full left-0 w-full mt-1 bg-[#0d0414] border-l-2 border-pink-500 shadow-2xl z-100 overflow-hidden animate-in fade-in slide-in-from-top-2">
               {difficulties.map((level) => (
                 <button
                   key={level}

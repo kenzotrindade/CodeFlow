@@ -134,7 +134,7 @@ export default function Login() {
     <Suspense
       fallback={
         <div className="text-white font-black italic animate-pulse p-20 text-center" role="status">
-          CHARGEMENT DU CENTRE D'ACCÈS...
+          CHARGEMENT DU CENTRE D&apos;ACCÈS...
         </div>
       }
     >

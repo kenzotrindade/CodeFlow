@@ -126,7 +126,7 @@ export default async function Dashboard() {
             </div>
           </Link>
 
-          <div className="p-8 lg:flex-1 bg-white/[0.02]">
+          <div className="p-8 lg:flex-1 bg-white/2">
             <div className="flex items-center gap-2 mb-6 text-white/60">
               <Terminal className="w-4 h-4" aria-hidden="true" />
               <h2 className="text-[10px] font-black uppercase tracking-[0.4em]">
@@ -232,7 +232,7 @@ export default async function Dashboard() {
               {passedExercises.map((p) => (
                 <article
                   key={p.id}
-                  className="group p-5 bg-white/[0.02] border border-white/10 hover:border-white/20 transition-all flex items-center justify-between"
+                  className="group p-5 bg-white/2 border border-white/10 hover:border-white/20 transition-all flex items-center justify-between"
                 >
                   <div className="space-y-1">
                     <p className="text-[9px] font-mono text-white/50 uppercase tracking-widest">

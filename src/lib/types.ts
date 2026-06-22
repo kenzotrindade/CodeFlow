@@ -58,8 +58,6 @@ export const VALIDATION_MESSAGE = {
   EMAIL: "Please enter a valid email address.",
 };
 
-// ### AI Response Types
-
 export interface AIValidationResponse {
   passed: boolean;
   score: number;

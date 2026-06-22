@@ -8,7 +8,7 @@ import { BarChart2, BookOpen } from "lucide-react";
 import type { Metadata } from "next";
 
 // #################################
-// ### Exercises Page SEO
+// ### Exercises Page
 // #################################
 
 export const metadata: Metadata = {

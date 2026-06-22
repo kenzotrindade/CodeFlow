@@ -8,7 +8,7 @@ import { fillTemplate, parseAIResponse } from "@/lib/utils";
 import { AIGenerationResponse } from "@/lib/types";
 
 // #################################
-// ### Techwatch Action
+// ### Techwatch Generation
 // #################################
 
 export async function TechwatchPrompt({

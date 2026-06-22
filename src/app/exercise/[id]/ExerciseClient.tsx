@@ -29,6 +29,10 @@ interface ExerciseClientProps {
   };
 }
 
+// #################################
+// ### Exercise Client Validation
+// #################################
+
 export default function ExerciseClient({
   exercise,
 }: Readonly<ExerciseClientProps>) {
@@ -166,7 +170,7 @@ export default function ExerciseClient({
                     <section className="space-y-6">
                       <div className="flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.4em] text-pink-500/60">
                         <Library className="w-4 h-4" aria-hidden="true" />
-                        Protocole d'Optimisation
+                        Protocole d&apos;Optimisation
                       </div>
                       <div className="grid grid-cols-1 gap-4">
                         {validationResult.learning_path.map((item, idx) => (
@@ -214,7 +218,7 @@ export default function ExerciseClient({
                   aria-hidden="true"
                 />
                 <p className="text-xs text-purple-100/60 leading-relaxed italic uppercase tracking-wider">
-                  Soumettez votre implémentation pour déclencher l'audit de
+                  Soumettez votre implémentation pour déclencher l&apos;audit de
                   sécurité de votre mentor.
                 </p>
               </div>
