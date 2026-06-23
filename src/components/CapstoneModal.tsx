@@ -1,11 +1,18 @@
 import { X } from "lucide-react";
 
+// #################################
+// ### Capstone UI
+// #################################
+
 interface CapstoneModalProps {
   onAccept: () => void;
   onClose: () => void;
 }
 
-export function CapstoneModal({ onAccept, onClose }: Readonly<CapstoneModalProps>) {
+export function CapstoneModal({
+  onAccept,
+  onClose,
+}: Readonly<CapstoneModalProps>) {
   return (
     <div className="fixed inset-0 z-200 flex items-center justify-center bg-[#0a0414]/90 backdrop-blur-md p-6">
       <div className="relative group">

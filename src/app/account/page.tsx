@@ -6,12 +6,13 @@ import { User } from "lucide-react";
 import type { Metadata } from "next";
 
 // #################################
-// ### Account Page SEO
+// ### Account Page
 // #################################
 
 export const metadata: Metadata = {
   title: "Profil | CodeFlow",
-  description: "Gérez vos paramètres utilisateur, mettez à jour vos identifiants et personnalisez votre expérience CodeFlow.",
+  description:
+    "Gérez vos paramètres utilisateur, mettez à jour vos identifiants et personnalisez votre expérience CodeFlow.",
 };
 
 export default async function AccountPage() {
@@ -45,7 +46,10 @@ export default async function AccountPage() {
         </div>
       </header>
 
-      <section className="card-fragment p-8 lg:p-12 border-white/10 max-w-5xl mx-auto" aria-label="Formulaire de modification de profil">
+      <section
+        className="card-fragment p-8 lg:p-12 border-white/10 max-w-5xl mx-auto"
+        aria-label="Formulaire de modification de profil"
+      >
         <AccountForm user={user} />
       </section>
     </div>

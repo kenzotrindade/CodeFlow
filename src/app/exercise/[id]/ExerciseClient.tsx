@@ -219,7 +219,7 @@ export default function ExerciseClient({
                 />
                 <p className="text-xs text-purple-100/60 leading-relaxed italic uppercase tracking-wider">
                   Soumettez votre implémentation pour déclencher l&apos;audit de
-                  sécurité de votre mentor.
+                  votre mentor.
                 </p>
               </div>
             )}

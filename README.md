@@ -24,40 +24,42 @@
 
 ## ⚙️ Fonctionnalités clés
 
-*   **⚡ Génération Contextuelle :** Des exercices créés dynamiquement selon votre historique, votre langage et votre niveau.
-*   **🧠 Mentor IA (Lumina) :** Audit de code en temps réel, feedback incisif et indices pédagogiques progressifs.
-*   **🚀 Mode Capstone (Défi) :** Déclenchement de projets de synthèse immersifs pour valider vos acquis en conditions réelles.
-*   **📊 Suivi de progression :** Visualisez l'évolution de vos séquences validées et vos défis techniques.
-*   **🛠️ Éditeur Prisme :** Un environnement de codage intégré, géométrique et optimisé pour le focus.
+- **⚡ Génération Contextuelle :** Des exercices créés dynamiquement selon votre historique, votre langage et votre niveau.
+- **🧠 Mentor IA (Lumina) :** Audit de code en temps réel, feedback incisif et indices pédagogiques progressifs.
+- **🚀 Mode Capstone (Défi) :** Déclenchement de projets de synthèse immersifs pour valider vos acquis en conditions réelles.
+- **📊 Suivi de progression :** Visualisez l'évolution de vos séquences validées et vos défis techniques.
+- **🛠️ Éditeur Prisme :** Un environnement de codage intégré, géométrique et optimisé pour le focus.
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Component | Technology |
-| :--- | :--- |
-| **Framework** | Next.js 16 (App Router) |
-| **Langage** | TypeScript |
-| **Styling** | Tailwind CSS |
-| **ORM** | Prisma |
+| Component                     | Technology                    |
+| :---------------------------- | :---------------------------- |
+| **Framework**                 | Next.js 16 (App Router)       |
+| **Langage**                   | TypeScript                    |
+| **Styling**                   | Tailwind CSS                  |
+| **ORM**                       | Prisma 6                      |
 | **Intelligence Artificielle** | OpenAI / Llama 3.3 (via Groq) |
-| **Auth** | NextAuth.js |
-| **Editor** | Monaco Editor |
+| **Auth**                      | NextAuth.js                   |
+| **Editor**                    | Monaco Editor                 |
+| **CI/CD**                     | Github / Vercel               |
 
 ---
 
 ## 🚀 Lancer le projet
 
 ### Prérequis
-*   Node.js 20+
-*   Une base de données PostgreSQL (ou compatible)
-*   Une clé API OpenAI / Groq
+
+- Node.js 20+
+- Une base de données PostgreSQL (ou compatible)
+- Une clé API OpenAI / Groq
 
 ### Installation
 
 1. **Cloner le dépôt :**
    ```bash
-   git clone https://github.com/votre-utilisateur/code_flow.git
+   git clone https://github.com/kenzotrindade/CodeFlow.git
    ```
 2. **Installer les dépendances :**
    ```bash
@@ -78,8 +80,9 @@
 
 ## 📂 Structure du projet
 
-*   `src/app/`: Routes de l'application et pages principales.
-*   `src/app/actions/`: Logiques serveur (Génération IA, Validation, Utilisateur).
-*   `src/components/`: Composants UI réutilisables (Monaco Editor, Dashboard, Modales).
-*   `src/lib/`: Utilitaires, typages, configuration Prisma et système de prompts IA.
-*   `prisma/`: Schéma de base de données et migrations.
+- `src/app/`: Routes de l'application et pages principales.
+- `src/app/actions/`: Logiques serveur (Génération IA, Validation, Utilisateur).
+- `src/components/`: Composants UI réutilisables (Monaco Editor, Dashboard, Modales).
+- `src/lib/`: Utilitaires, typages, configuration Prisma et système de prompts IA.
+- `src/lib/prompts`: Prompting IA, règles / cadre nécessaire au bon fonctionnement de l'IA.
+- `prisma/`: Schéma de base de données et migrations.

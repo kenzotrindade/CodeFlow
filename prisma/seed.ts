@@ -1,5 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 
+// #################################
+// ### Seeding DB
+// #################################
+
 const prisma = new PrismaClient();
 
 async function main() {
