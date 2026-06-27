@@ -19,8 +19,16 @@ export const metadata: Metadata = {
     default: "CodeFlow | Console d'Ingénierie Logicielle",
     template: "%s | CodeFlow",
   },
-  description: "Évoluez vers l'excellence technique avec CodeFlow. Audit de code par IA, veille technologique temps réel et modules d'apprentissage immersifs.",
-  keywords: ["développement", "IA", "audit code", "mentorat", "ingénierie logicielle", "veille tech"],
+  description:
+    "Évoluez vers l'excellence technique avec CodeFlow. Audit de code par IA, veille technologique temps réel et modules d'apprentissage immersifs.",
+  keywords: [
+    "développement",
+    "IA",
+    "audit code",
+    "mentorat",
+    "ingénierie logicielle",
+    "veille tech",
+  ],
   authors: [{ name: "CodeFlow Team" }],
   openGraph: {
     type: "website",
@@ -28,7 +36,8 @@ export const metadata: Metadata = {
     url: "https://codeflow.dev",
     siteName: "CodeFlow",
     title: "CodeFlow | Forgez votre futur d'ingénieur",
-    description: "La plateforme ultime pour les développeurs souhaitant maîtriser l'architecture logicielle.",
+    description:
+      "La plateforme ultime pour les développeurs souhaitant maîtriser l'architecture logicielle.",
   },
   robots: {
     index: true,
@@ -45,8 +54,10 @@ export default function RootLayout({
     <html lang="fr">
       <body className="relative">
         <SessionProviderWrapper>
-          {/* Background Elements */}
-          <div className="fixed inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
+          <div
+            className="fixed inset-0 overflow-hidden pointer-events-none z-0"
+            aria-hidden="true"
+          >
             <div className="prisma-shape w-125 h-125 top-[-10%] right-[-5%] rotate-12 opacity-30" />
             <div className="prisma-shape w-150 h-150 bottom-[-10%] left-[-10%] -rotate-12 opacity-20" />
 
@@ -80,9 +91,7 @@ export default function RootLayout({
             <Navbar />
           </header>
 
-          <main className="relative z-10 pt-24 pb-12">
-            {children}
-          </main>
+          <main className="relative z-10 pt-12 pb-12">{children}</main>
 
           <Toaster richColors position="bottom-right" theme="dark" />
         </SessionProviderWrapper>
