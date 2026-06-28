@@ -44,6 +44,7 @@
 | **Auth**                      | NextAuth.js                   |
 | **Editor**                    | Monaco Editor                 |
 | **CI/CD**                     | Github / Vercel               |
+| **Security**                  | SonarQube                     |
 
 ---
 
