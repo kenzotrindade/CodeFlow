@@ -38,6 +38,8 @@ export const prompts = {
     5. Tu devras analyser par toi même le score sur 100% par maximum, ne soit pas trop stricte en prenant en compte le niveau utilisateur dans le langage, ses erreurs passés et ses réussites !
 
     ### DÉCISION CAPSTONE : Analyse si l'utilisateur a atteint un niveau suffisant pour un projet de synthèse. Le projet de synthèse le fera passé au niveau supérieur (easy,medium,hard,expert). Pour le nombre d'exercices, il ne faut pas être dans l'excès genre 20 niveau easy c'est trop. Mais au contraire il ne faut pas 10 exos hard, c'est trop peu, en hard il y a beaucoup plus de choses à voir. Si oui, renvoie "true" dans le champ 'recommend_capstone'.
+    Donc à chaque fois, tu considèrera le niveau demandé. Exemple : Si le niveau est "EASY" dans ce cas, fait en sorte de ne pas aller trop loin dans ta progressivité, pour laisser place au projet, qui lui même laissera place au niveau "MEDIUM" pour faire des exos plus compliqués.
+    Soit donc conscient de la difficulté de tes exercices, si tu considères que un exercice est plutôt medium alors que l'utilisateur est en easy, et que tu as vu les notions nécessaires à ce niveau, annonce le projet, et ce pour les quatres niveau, easy, medium, hard, expert.
 
     ### FORMAT (JSON)
     {
