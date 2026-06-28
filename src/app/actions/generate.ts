@@ -41,11 +41,18 @@ export async function GeneratePrompt({
   });
 
   const history = exercises
-    .map(
-      (e) =>
-        `- ${e.title} (${e.difficulty}, Statut: ${e.attempts[0]?.status || "Non tenté"})`,
-    )
-    .join("\n");
+    .map((e) => {
+      const attempt = e.attempts[0];
+
+      return `
+Titre: ${e.title}
+Niveau: ${e.difficulty}
+Enoncer: ${e.expectedOutput}
+Statut: ${attempt?.status ?? "Non tenté."}
+Essai de l'utilisateur (son code): ${attempt.submittedCode ?? "Aucun code envoyé par l'utilisateur pour le moment."}
+`;
+    })
+    .join("\n\n");
 
   const levelGuidelines: LevelGuideLine =
     prompts.exercise_generation.level_guidelines;
